@@ -103,7 +103,7 @@ export default function AttestationsChart({ data }: AttestationsChartProps) {
           config={{
             value: {
               label: "Impact",
-              color: "hsl(var(--warning))",
+              color: "#fbbf24",
             },
           }}
           className="h-[250px] md:h-[300px] w-full"
@@ -139,7 +139,7 @@ export default function AttestationsChart({ data }: AttestationsChartProps) {
                   )
                 }}
               />
-              <Bar dataKey="value" fill="hsl(var(--warning))" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="#fbbf24" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartContainer>
