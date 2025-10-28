@@ -48,33 +48,8 @@ export default function GroupCard({ group, onManage }: GroupCardProps) {
       intent={group.performance >= 98 ? "success" : "default"}
     >
       <div className="space-y-4 md:space-y-6">
-        <div className="grid grid-cols-2 gap-3 md:gap-4 pb-2 border-b border-border">
-          <div className="col-span-2 flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">GNO Price</span>
-            <span className="font-display text-success">$139.33</span>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">ACTIVE VALIDATORS</p>
-            <span className="text-sm md:text-base font-display">450,450</span>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">STAKED</p>
-            <span className="text-sm md:text-base font-display">350,000 GNO</span>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">JOINING</p>
-            <span className="text-sm md:text-base font-display text-chart-2">2,345</span>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">LEAVING</p>
-            <span className="text-sm md:text-base font-display text-warning">500</span>
-          </div>
-          <div className="col-span-2 text-right">
-            <span className="text-xs text-muted-foreground">Updated: 10/27 08:31pm UTC</span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+        {/* Removed GNO price and global stats from group card */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 pb-4 border-b border-border">
           <div>
             <p className="text-xs text-muted-foreground mb-1">BALANCE</p>
             <span className="text-lg md:text-xl font-display">{group.totalBalance.toFixed(2)} GNO</span>

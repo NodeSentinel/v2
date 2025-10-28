@@ -162,6 +162,27 @@
       "timestamp": "2024-10-27T14:10:00Z",
       "details": "Deposit of 32 GNO confirmed",
       "amount": 32
+    },
+    {
+      "id": "evt-6",
+      "type": "attestation",
+      "validatorIndex": 123456,
+      "timestamp": "2024-10-27T20:30:00Z",
+      "details": "Attestation submitted for slot 8234580"
+    },
+    {
+      "id": "evt-7",
+      "type": "attestation",
+      "validatorIndex": 123457,
+      "timestamp": "2024-10-27T20:25:00Z",
+      "details": "Attestation submitted for slot 8234575"
+    },
+    {
+      "id": "evt-8",
+      "type": "attestation",
+      "validatorIndex": 234567,
+      "timestamp": "2024-10-27T20:20:00Z",
+      "details": "Attestation submitted for slot 8234570"
     }
   ]
 }

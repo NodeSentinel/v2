@@ -2,7 +2,7 @@ export interface Validator {
   id: string
   index: number
   pubkey: string
-  status: "active" | "inactive" | "pending" | "exited" | "slashed"
+  status: "active" | "inactive" | "pending" | "exited" | "slashed" | "active_exiting"
   balance: number // in GNO
   effectiveBalance: number
   performance: number // percentage
@@ -68,6 +68,7 @@ export interface ValidatorEvent {
     | "block_proposed"
     | "sync_committee"
     | "slashed"
+    | "attestation"
   validatorIndex: number
   timestamp: string
   details: string

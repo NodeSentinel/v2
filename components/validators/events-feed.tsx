@@ -1,31 +1,63 @@
 "use client"
 
 import { useState } from "react"
-import type { ValidatorEvent } from "@/types/validator"
+import type { ValidatorEvent, Validator } from "@/types/validator"
 import DashboardCard from "@/components/dashboard/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import ArrowRight from "@/components/icons/arrow-right"
 
 interface EventsFeedProps {
   events: ValidatorEvent[]
+  validators: Validator[]
 }
 
-export default function EventsFeed({ events }: EventsFeedProps) {
-  const allEvents = events
-  const incidents = events.filter((e) => e.type === "inactive" || e.type === "slashed")
-  const rewards = events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal")
-  const blocks = events.filter((e) => e.type === "block_proposed")
-  const deposits = events.filter((e) => e.type === "deposit")
-  const withdrawals = events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal")
+export default function EventsFeed({ events, validators }: EventsFeedProps) {
+  const [selectedValidator, setSelectedValidator] = useState<string>("all")
+
+  const filterEventsByValidator = (eventList: ValidatorEvent[]) => {
+    if (selectedValidator === "all") return eventList
+    return eventList.filter((e) => e.validatorIndex.toString() === selectedValidator)
+  }
+
+  const allEvents = filterEventsByValidator(events)
+  const incidents = filterEventsByValidator(events.filter((e) => e.type === "inactive" || e.type === "slashed"))
+  const rewards = filterEventsByValidator(
+    events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
+  )
+  const blocks = filterEventsByValidator(events.filter((e) => e.type === "block_proposed"))
+  const deposits = filterEventsByValidator(events.filter((e) => e.type === "deposit"))
+  const withdrawals = filterEventsByValidator(
+    events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
+  )
+  const attestations = filterEventsByValidator(events.filter((e) => e.type === "attestation"))
 
   return (
-    <DashboardCard title="EVENTS" intent="default">
+    <DashboardCard
+      title="EVENTS"
+      intent="default"
+      addon={
+        <Select value={selectedValidator} onValueChange={setSelectedValidator}>
+          <SelectTrigger className="w-32 md:w-40 h-8 text-xs md:text-sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Validators</SelectItem>
+            {validators.map((validator) => (
+              <SelectItem key={validator.id} value={validator.index.toString()}>
+                Val #{validator.index}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      }
+    >
       <Tabs defaultValue="all" className="w-full">
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-          <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-6 h-auto">
+          <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-7 h-auto">
             <TabsTrigger value="all" className="h-10 flex-shrink-0 px-4 md:px-3">
               All
             </TabsTrigger>
@@ -43,6 +75,9 @@ export default function EventsFeed({ events }: EventsFeedProps) {
             </TabsTrigger>
             <TabsTrigger value="withdrawals" className="h-10 flex-shrink-0 px-4 md:px-3">
               Withdrawals
+            </TabsTrigger>
+            <TabsTrigger value="attestations" className="h-10 flex-shrink-0 px-4 md:px-3">
+              Attestations
             </TabsTrigger>
           </TabsList>
         </div>
@@ -92,6 +127,14 @@ export default function EventsFeed({ events }: EventsFeedProps) {
             <p className="text-sm text-muted-foreground text-center py-8">No withdrawals</p>
           )}
         </TabsContent>
+
+        <TabsContent value="attestations" className="space-y-2 mt-4 min-h-[400px]">
+          {attestations.length > 0 ? (
+            attestations.map((event) => <EventItem key={event.id} event={event} />)
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No attestations</p>
+          )}
+        </TabsContent>
       </Tabs>
     </DashboardCard>
   )
@@ -120,6 +163,8 @@ function EventItem({ event }: EventItemProps) {
         return "⚡"
       case "slashed":
         return "✕"
+      case "attestation":
+        return "✓"
     }
   }
 
@@ -135,6 +180,7 @@ function EventItem({ event }: EventItemProps) {
         return "destructive"
       case "block_proposed":
       case "sync_committee":
+      case "attestation":
         return "default"
     }
   }
@@ -153,6 +199,8 @@ function EventItem({ event }: EventItemProps) {
         return "text-chart-1"
       case "sync_committee":
         return "text-warning"
+      case "attestation":
+        return "text-positive"
     }
   }
 
