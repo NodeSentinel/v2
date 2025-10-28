@@ -89,7 +89,7 @@
     "alertFrequency": 60
   },
   "stats": {
-    "performance1h": 100.0,
+    "performance1h": 75.0,
     "balance": 168.93,
     "balanceUsd": 23537,
     "claimable": 0.14,
@@ -103,6 +103,9 @@
     "xdaiDay": 0.05,
     "xdaiWeek": 0.25,
     "xdaiMonth": 0.27,
+    "missedDay": 0.02,
+    "missedWeek": 0.08,
+    "missedMonth": 0.15,
     "totalDay": 5.27,
     "totalWeek": 35.15,
     "totalMonth": 43.68,

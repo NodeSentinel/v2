@@ -45,6 +45,9 @@ export interface Stats {
   xdaiDay: number
   xdaiWeek: number
   xdaiMonth: number
+  missedDay: number
+  missedWeek: number
+  missedMonth: number
   totalDay: number
   totalWeek: number
   totalMonth: number
