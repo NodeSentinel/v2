@@ -120,7 +120,8 @@
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.22 0 0);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.52 0.24 263.19); /* Brighter primary for better visibility */
+  /* Brightened primary color from 0.52 to 0.72 for much better contrast in dark theme */
+  --primary: oklch(0.72 0.2 250); /* Brighter, more saturated blue for better visibility */
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.32 0 0); /* Lighter secondary for better contrast */
   --secondary-foreground: oklch(0.98 0 0); /* Bright white text on secondary */
@@ -128,7 +129,8 @@
   --muted-foreground: oklch(0.75 0 0); /* Lighter muted text for readability */
   --accent: oklch(0.98 0 0 / 8%); /* Slightly more visible accent */
   --accent-foreground: oklch(0.98 0 0);
-  --border: oklch(1 0 0 / 15%); /* More visible borders */
+  /* Increased border opacity from 15% to 20% for better visibility */
+  --border: oklch(1 0 0 / 20%); /* More visible borders */
   --pop: oklch(0.98 0 0 / 5%);
   --input: oklch(1 0 0 / 20%); /* More visible input fields */
   --ring: oklch(0.6 0 0); /* Brighter focus rings */
@@ -137,20 +139,22 @@
   --warning: oklch(0.7 0.18 70);
   --destructive: oklch(0.6 0.2 36);
 
-  --chart-1: oklch(0.55 0.24 264);
-  --chart-2: oklch(0.7 0.17 162);
+  /* Improved chart colors for better contrast and visibility */
+  --chart-1: oklch(0.65 0.22 250); /* Brighter blue */
+  --chart-2: oklch(0.72 0.18 162); /* Brighter green/teal */
   --chart-3: oklch(0.75 0.18 70);
   --chart-4: oklch(0.65 0.26 304);
   --chart-5: oklch(0.65 0.24 16);
 
+  /* Updated sidebar colors to match improved primary */
   --sidebar: oklch(0.22 0.0037 345.62);
   --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.52 0.24 263.19);
+  --sidebar-primary: oklch(0.72 0.2 250); /* Match improved primary */
   --sidebar-primary-foreground: oklch(0.98 0 0);
   --sidebar-accent: oklch(0.98 0 0 / 8%);
   --sidebar-accent-hover: oklch(0.98 0 0 / 12%);
   --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(1 0 0 / 15%);
+  --sidebar-border: oklch(1 0 0 / 20%); /* Match improved border */
   --sidebar-ring: oklch(0.6 0 0);
 }
 
