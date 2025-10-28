@@ -5,12 +5,26 @@ import StatsOverview from "@/components/validators/stats-overview"
 import AttestationsChart from "@/components/validators/attestations-chart"
 import EventsFeed from "@/components/validators/events-feed"
 import GroupList from "@/components/validators/group-list"
+import NotificationBanner, { type Notification } from "@/components/validators/notification-banner"
 import validatorMockJson from "@/validator-mock.json"
 import type { ValidatorData, GroupFilter } from "@/types/validator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TrendingUp, Users, Coins, ArrowUpCircle, ArrowDownCircle } from "lucide-react"
 
 const validatorData = validatorMockJson as ValidatorData
+
+const demoNotifications: Notification[] = [
+  {
+    id: "fee-recipient-warning",
+    type: "warning",
+    message: "You have not set the fee recipient address for group Alpha.",
+  },
+  {
+    id: "hard-fork-info",
+    type: "info",
+    message: "Fukuoka hard fork will be activated on January 15, 2025. Be sure you update your nodes.",
+  },
+]
 
 export default function DashboardOverview() {
   const [selectedGroup, setSelectedGroup] = useState<GroupFilter>("all")
@@ -22,6 +36,8 @@ export default function DashboardOverview() {
 
   return (
     <div className="py-4 md:py-8 space-y-6 md:space-y-8">
+      <NotificationBanner notifications={demoNotifications} />
+
       <div className="space-y-3">
         <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">Chain Statistics</h2>
         <div className="bg-card border-2 border-primary/20 rounded-lg p-4 md:p-6">
