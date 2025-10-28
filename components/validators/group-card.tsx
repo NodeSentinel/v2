@@ -9,9 +9,10 @@ import { Badge } from "@/components/ui/badge"
 interface GroupCardProps {
   group: Group
   onManage: () => void
+  gnoPrice: number // Added gnoPrice prop
 }
 
-export default function GroupCard({ group, onManage }: GroupCardProps) {
+export default function GroupCard({ group, onManage, gnoPrice }: GroupCardProps) {
   const statusCounts = group.validators.reduce(
     (acc, v) => {
       acc[v.status] = (acc[v.status] || 0) + 1
@@ -35,6 +36,10 @@ export default function GroupCard({ group, onManage }: GroupCardProps) {
 
   const totalValidators = group.validators.length
 
+  const balanceUsd = (group.totalBalance * gnoPrice).toFixed(2)
+  const effectiveBalanceUsd = (group.totalEffectiveBalance * gnoPrice).toFixed(0)
+  const claimableUsd = (group.claimableRewards * gnoPrice).toFixed(2)
+
   return (
     <DashboardCard
       title={
@@ -48,21 +53,23 @@ export default function GroupCard({ group, onManage }: GroupCardProps) {
       intent={group.performance >= 98 ? "success" : "default"}
     >
       <div className="space-y-4 md:space-y-6">
-        {/* Removed GNO price and global stats from group card */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 pb-4 border-b border-border">
           <div>
             <p className="text-xs text-muted-foreground mb-1">BALANCE</p>
             <span className="text-lg md:text-xl font-display">{group.totalBalance.toFixed(2)} GNO</span>
+            <p className="text-xs text-muted-foreground">${balanceUsd}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground mb-1">EFFECTIVE BALANCE</p>
             <span className="text-lg md:text-xl font-display">{group.totalEffectiveBalance.toFixed(0)} GNO</span>
+            <p className="text-xs text-muted-foreground">${effectiveBalanceUsd}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground mb-1">CLAIMABLE</p>
             <span className="text-lg md:text-xl font-display text-success">
               {group.claimableRewards.toFixed(2)} GNO
             </span>
+            <p className="text-xs text-muted-foreground">${claimableUsd}</p>
           </div>
         </div>
 

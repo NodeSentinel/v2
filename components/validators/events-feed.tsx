@@ -6,7 +6,7 @@ import DashboardCard from "@/components/dashboard/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import ArrowRight from "@/components/icons/arrow-right"
 
@@ -16,11 +16,19 @@ interface EventsFeedProps {
 }
 
 export default function EventsFeed({ events, validators }: EventsFeedProps) {
-  const [selectedValidator, setSelectedValidator] = useState<string>("all")
+  const [validatorFilter, setValidatorFilter] = useState<string>("")
 
   const filterEventsByValidator = (eventList: ValidatorEvent[]) => {
-    if (selectedValidator === "all") return eventList
-    return eventList.filter((e) => e.validatorIndex.toString() === selectedValidator)
+    if (!validatorFilter.trim()) return eventList
+
+    const filterIndices = validatorFilter
+      .split(",")
+      .map((v) => v.trim())
+      .filter((v) => v !== "")
+
+    if (filterIndices.length === 0) return eventList
+
+    return eventList.filter((e) => filterIndices.some((index) => e.validatorIndex.toString() === index))
   }
 
   const allEvents = filterEventsByValidator(events)
@@ -40,19 +48,12 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
       title="EVENTS"
       intent="default"
       addon={
-        <Select value={selectedValidator} onValueChange={setSelectedValidator}>
-          <SelectTrigger className="w-32 md:w-40 h-8 text-xs md:text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Validators</SelectItem>
-            {validators.map((validator) => (
-              <SelectItem key={validator.id} value={validator.index.toString()}>
-                Val #{validator.index}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Input
+          placeholder="Filter validators (e.g., 123, 456)"
+          value={validatorFilter}
+          onChange={(e) => setValidatorFilter(e.target.value)}
+          className="w-48 md:w-64 h-8 text-xs md:text-sm"
+        />
       }
     >
       <Tabs defaultValue="all" className="w-full">

@@ -8,47 +8,84 @@ import GroupList from "@/components/validators/group-list"
 import validatorMockJson from "@/validator-mock.json"
 import type { ValidatorData, GroupFilter } from "@/types/validator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
+import { TrendingUp, Users, Coins, ArrowUpCircle, ArrowDownCircle } from "lucide-react"
 
 const validatorData = validatorMockJson as ValidatorData
 
 export default function DashboardOverview() {
   const [selectedGroup, setSelectedGroup] = useState<GroupFilter>("all")
 
+  const totalStakedGno = 350000
+  const totalStakedUsd = (totalStakedGno * validatorData.stats.gnoPrice).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  })
+
   return (
     <div className="py-4 md:py-8 space-y-6 md:space-y-8">
       <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3 md:gap-4 flex-wrap">
-            <Badge variant="outline" className="text-sm md:text-base font-display px-3 py-1.5">
-              GNO ${validatorData.stats.gnoPrice.toFixed(2)}
-            </Badge>
-            <div className="flex items-center gap-2 md:gap-3 text-xs md:text-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <span className="text-muted-foreground">ACTIVE VALIDATORS</span>
-                <span className="font-display">450,450</span>
+        <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">Chain Statistics</h2>
+        <div className="bg-card border-2 border-primary/20 rounded-lg p-4 md:p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {/* GNO Price Card */}
+            <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <TrendingUp className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-muted-foreground hidden sm:inline">|</span>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <span className="text-muted-foreground">STAKED</span>
-                <span className="font-display">350,000 GNO</span>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">GNO Price</p>
+                <p className="text-xl md:text-2xl font-display font-bold">${validatorData.stats.gnoPrice.toFixed(2)}</p>
               </div>
-              <span className="text-muted-foreground hidden sm:inline">|</span>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <span className="text-muted-foreground">JOINING</span>
-                <span className="font-display text-chart-2">2,345</span>
+            </div>
+
+            {/* Active Validators Card */}
+            <div className="bg-chart-2/5 border border-chart-2/20 rounded-lg p-4 flex items-center gap-3">
+              <div className="p-2 bg-chart-2/10 rounded-lg">
+                <Users className="w-5 h-5 text-chart-2" />
               </div>
-              <span className="text-muted-foreground hidden sm:inline">|</span>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <span className="text-muted-foreground">LEAVING</span>
-                <span className="font-display text-warning">500</span>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Active Validators</p>
+                <p className="text-xl md:text-2xl font-display font-bold">450,450</p>
+              </div>
+            </div>
+
+            {/* Staked GNO Card */}
+            <div className="bg-accent/5 border border-accent/20 rounded-lg p-4 flex items-center gap-3">
+              <div className="p-2 bg-accent/10 rounded-lg">
+                <Coins className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Total Staked</p>
+                <p className="text-xl md:text-2xl font-display font-bold">{totalStakedGno.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">GNO</p>
+                <p className="text-xs text-muted-foreground">${totalStakedUsd}</p>
+              </div>
+            </div>
+
+            {/* Joining/Leaving Card */}
+            <div className="bg-muted/30 border border-border rounded-lg p-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ArrowUpCircle className="w-4 h-4 text-chart-2" />
+                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Joining</span>
+                  </div>
+                  <span className="text-lg font-display font-bold text-chart-2">2,345</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ArrowDownCircle className="w-4 h-4 text-warning" />
+                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Leaving</span>
+                  </div>
+                  <span className="text-lg font-display font-bold text-warning">500</span>
+                </div>
               </div>
             </div>
           </div>
-
-          <p className="text-xs md:text-sm text-muted-foreground">Updated: {validatorData.stats.lastUpdated}</p>
         </div>
+      </div>
 
+      <div className="space-y-3">
+        <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">User Dashboard</h2>
         <Select value={selectedGroup} onValueChange={(value) => setSelectedGroup(value as GroupFilter)}>
           <SelectTrigger className="w-full sm:w-64 h-12 md:h-14 text-base md:text-lg font-medium border-2 bg-background">
             <SelectValue />

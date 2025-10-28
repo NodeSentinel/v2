@@ -2,10 +2,13 @@
 
 import { useState } from "react"
 import type { Group, GroupFilter } from "@/types/validator"
-import { Badge } from "@/components/ui/badge"
 import GroupCard from "./group-card"
 import GroupForm from "./group-form"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
+import validatorMockJson from "@/validator-mock.json"
+import type { ValidatorData } from "@/types/validator"
+
+const validatorData = validatorMockJson as ValidatorData
 
 interface GroupListProps {
   groups: Group[]
@@ -48,14 +51,11 @@ export default function GroupList({ groups, selectedFilter }: GroupListProps) {
 
   return (
     <>
-      <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-lg font-display">
-          {selectedFilter === "all" ? "ALL GROUPS" : displayGroup.name.toUpperCase()}
-        </h2>
-        <Badge variant="secondary">{displayGroup.validators.length} validators</Badge>
-      </div>
-
-      <GroupCard group={displayGroup} onManage={() => handleManage(displayGroup)} />
+      <GroupCard
+        group={displayGroup}
+        onManage={() => handleManage(displayGroup)}
+        gnoPrice={validatorData.stats.gnoPrice}
+      />
 
       <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
