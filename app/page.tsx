@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import AttestationsChart from "@/components/validators/attestations-chart"
+import PerformanceMetrics from "@/components/validators/performance-metrics"
 import EventsFeed from "@/components/validators/events-feed"
 import GroupList from "@/components/validators/group-list"
 import NotificationBanner, { type Notification } from "@/components/validators/notification-banner"
@@ -154,7 +154,7 @@ export default function DashboardOverview() {
         gnoPrice={validatorData.stats.gnoPrice}
       />
 
-      <AttestationsChart data={validatorData.missedAttestations} />
+      <PerformanceMetrics data={validatorData.missedAttestations} />
 
       <EventsFeed events={validatorData.events} validators={validatorData.groups.flatMap((g) => g.validators)} />
 
