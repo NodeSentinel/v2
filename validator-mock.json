@@ -86,7 +86,12 @@
     "performanceThreshold": 98,
     "inactivitySlots": 32,
     "rewardThreshold": 0.1,
-    "alertFrequency": 60
+    "alertFrequency": 60,
+    "alerts": {
+      "syncCommitteeParticipation": true,
+      "withdrawals": true,
+      "blockProposer": false
+    }
   },
   "stats": {
     "performance1h": 75.0,

@@ -32,7 +32,7 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
   }
 
   const incidents = filterEventsByValidator(events.filter((e) => e.type === "inactive" || e.type === "slashed"))
-  const rewards = filterEventsByValidator(
+  const consolidations = filterEventsByValidator(
     events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
   )
   const blocks = filterEventsByValidator(events.filter((e) => e.type === "block_proposed"))
@@ -57,7 +57,7 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
       }
     >
       <Tabs defaultValue="missed-attestations" className="w-full">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-1 px-1 scrollbar-thin">
           <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-6 h-auto">
             <TabsTrigger value="missed-attestations" className="h-10 flex-shrink-0 px-3 md:px-3">
               Missed Attestations
@@ -65,8 +65,8 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
             <TabsTrigger value="incidents" className="h-10 flex-shrink-0 px-3 md:px-3">
               Incidents
             </TabsTrigger>
-            <TabsTrigger value="rewards" className="h-10 flex-shrink-0 px-3 md:px-3">
-              Rewards
+            <TabsTrigger value="consolidations" className="h-10 flex-shrink-0 px-3 md:px-3">
+              Consolidations
             </TabsTrigger>
             <TabsTrigger value="blocks" className="h-10 flex-shrink-0 px-3 md:px-3">
               Blocks
@@ -94,7 +94,7 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
           </div>
         </TabsContent>
 
-        <TabsContent value="rewards" className="space-y-2 mt-4 min-h-[400px]">
+        <TabsContent value="consolidations" className="space-y-2 mt-4 min-h-[400px]">
           <div className="flex items-center justify-center py-16">
             <p className="text-lg text-muted-foreground">Coming soon</p>
           </div>

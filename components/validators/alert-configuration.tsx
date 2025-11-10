@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
+import { Switch } from "@/components/ui/switch"
 
 interface AlertConfigurationProps {
   config: AlertConfig
@@ -22,6 +23,73 @@ export default function AlertConfiguration({ config: initialConfig }: AlertConfi
   return (
     <div className="space-y-6 p-6">
       <h2 className="text-2xl font-display">Configure Alerts</h2>
+
+      <DashboardCard title="ALERT TYPES" intent="default">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="sync-committee" className="text-sm font-medium">
+                Sync Committee Participation
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Get notified when validators are selected for sync committee duties
+              </p>
+            </div>
+            <Switch
+              id="sync-committee"
+              checked={config.alerts.syncCommitteeParticipation}
+              onCheckedChange={(checked) =>
+                setConfig({
+                  ...config,
+                  alerts: { ...config.alerts, syncCommitteeParticipation: checked },
+                })
+              }
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="withdrawals" className="text-sm font-medium">
+                Withdrawals
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Get notified when partial or full withdrawals are processed
+              </p>
+            </div>
+            <Switch
+              id="withdrawals"
+              checked={config.alerts.withdrawals}
+              onCheckedChange={(checked) =>
+                setConfig({
+                  ...config,
+                  alerts: { ...config.alerts, withdrawals: checked },
+                })
+              }
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="block-proposer" className="text-sm font-medium">
+                Block Proposer
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Get notified when validators are selected to propose blocks
+              </p>
+            </div>
+            <Switch
+              id="block-proposer"
+              checked={config.alerts.blockProposer}
+              onCheckedChange={(checked) =>
+                setConfig({
+                  ...config,
+                  alerts: { ...config.alerts, blockProposer: checked },
+                })
+              }
+            />
+          </div>
+        </div>
+      </DashboardCard>
 
       <DashboardCard title="PERFORMANCE ALERTS" intent="default">
         <div className="space-y-6">

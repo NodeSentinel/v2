@@ -12,11 +12,11 @@ interface PerformanceMetricsProps {
 }
 
 type TimeRange = "1h" | "24h" | "7d"
-type MetricType = "attestations" | "rewards"
+type MetricType = "consensus-rewards" | "execution-rewards" | "missed-attestations"
 
 export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>("1h")
-  const [metricType, setMetricType] = useState<MetricType>("attestations")
+  const [metricType, setMetricType] = useState<MetricType>("missed-attestations")
 
   const chartData = useMemo(() => {
     const now = new Date()
@@ -59,33 +59,41 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
         timeLabel = date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
       }
 
-      const totalPossible = 1.0
-      const missedPercentage = Math.random() * 0.15 // 0-15% missed
-      const earned = totalPossible * (1 - missedPercentage)
-      const missed = totalPossible * missedPercentage
+      const executionReward = Number((Math.random() * 0.5 + 0.3).toFixed(3))
+
+      const totalConsensus = 1.0
+      const consensusMissedPercentage = Math.random() * 0.15
+      const consensusEarned = Number((totalConsensus * (1 - consensusMissedPercentage)).toFixed(3))
+      const consensusMissed = Number((totalConsensus * consensusMissedPercentage).toFixed(3))
 
       return {
         time: timeLabel,
-        // Attestations data
+        // Missed Attestations data (yellow)
         missedValue: item.count * item.validatorCount,
         slot: item.count,
         validators: item.validatorCount,
-        // Rewards data
-        earned: Number(earned.toFixed(3)),
-        missed: Number(missed.toFixed(3)),
-        total: totalPossible,
+        // Execution Rewards data (green)
+        execution: executionReward,
+        // Consensus Rewards data (blue + red stacked)
+        consensusEarned,
+        consensusMissed,
+        consensusTotal: totalConsensus,
       }
     })
   }, [data, timeRange])
 
   const stats = useMemo(() => {
-    if (metricType === "attestations") {
+    if (metricType === "missed-attestations") {
       const totalMissed = chartData.reduce((sum, item) => sum + item.slot, 0)
       const maxValidators = chartData.length > 0 ? Math.max(...chartData.map((item) => item.validators)) : 0
       return { totalMissed, maxValidators }
+    } else if (metricType === "execution-rewards") {
+      const totalEarned = chartData.reduce((sum, item) => sum + item.execution, 0)
+      return { totalEarned: totalEarned.toFixed(2) }
     } else {
-      const totalEarned = chartData.reduce((sum, item) => sum + item.earned, 0)
-      const totalMissed = chartData.reduce((sum, item) => sum + item.missed, 0)
+      // consensus-rewards
+      const totalEarned = chartData.reduce((sum, item) => sum + item.consensusEarned, 0)
+      const totalMissed = chartData.reduce((sum, item) => sum + item.consensusMissed, 0)
       return { totalEarned: totalEarned.toFixed(2), totalMissed: totalMissed.toFixed(2) }
     }
   }, [chartData, metricType])
@@ -97,12 +105,13 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
       addon={
         <div className="flex items-center gap-2">
           <Select value={metricType} onValueChange={(value) => setMetricType(value as MetricType)}>
-            <SelectTrigger className="w-28 md:w-32 h-8">
+            <SelectTrigger className="w-36 md:w-44 h-8">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="attestations">Attestations</SelectItem>
-              <SelectItem value="rewards">Rewards</SelectItem>
+              <SelectItem value="consensus-rewards">Consensus Rewards</SelectItem>
+              <SelectItem value="execution-rewards">Execution Rewards</SelectItem>
+              <SelectItem value="missed-attestations">Missed Attestations</SelectItem>
             </SelectContent>
           </Select>
 
@@ -125,7 +134,7 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
       }
     >
       <div className="space-y-4">
-        {metricType === "attestations" ? (
+        {metricType === "missed-attestations" ? (
           <div className="grid grid-cols-2 gap-3 md:gap-4 pb-4">
             <div>
               <p className="text-xs text-muted-foreground mb-1">TOTAL MISSED</p>
@@ -136,11 +145,18 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
               <span className="text-xl md:text-2xl font-display text-warning">{stats.maxValidators}</span>
             </div>
           </div>
+        ) : metricType === "execution-rewards" ? (
+          <div className="grid grid-cols-1 gap-3 md:gap-4 pb-4">
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">TOTAL EARNED</p>
+              <span className="text-xl md:text-2xl font-display text-success">{stats.totalEarned} GNO</span>
+            </div>
+          </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 md:gap-4 pb-4">
             <div>
               <p className="text-xs text-muted-foreground mb-1">TOTAL EARNED</p>
-              <span className="text-xl md:text-2xl font-display text-success">{stats.totalEarned} GNO</span>
+              <span className="text-xl md:text-2xl font-display text-chart-1">{stats.totalEarned} GNO</span>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">TOTAL MISSED</p>
@@ -149,7 +165,7 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
           </div>
         )}
 
-        {metricType === "attestations" ? (
+        {metricType === "missed-attestations" ? (
           <ChartContainer
             config={{
               missedValue: {
@@ -195,14 +211,56 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>
+        ) : metricType === "execution-rewards" ? (
+          <ChartContainer
+            config={{
+              execution: {
+                label: "Execution",
+                color: "#10b981",
+              },
+            }}
+            className="h-[250px] md:h-[300px] w-full"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                <XAxis
+                  dataKey="time"
+                  stroke="#888888"
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fill: "#888888" }}
+                />
+                <YAxis stroke="#888888" fontSize={10} tickLine={false} axisLine={false} tick={{ fill: "#888888" }} />
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (!active || !payload || !payload.length) return null
+                    const data = payload[0].payload
+                    return (
+                      <div className="rounded-lg border bg-background p-3 shadow-md">
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between gap-4">
+                            <span className="text-xs text-muted-foreground">Earned:</span>
+                            <span className="text-sm font-display text-success">{data.execution} GNO</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }}
+                />
+                <Bar dataKey="execution" fill="#10b981" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
         ) : (
           <ChartContainer
             config={{
-              earned: {
+              consensusEarned: {
                 label: "Earned",
-                color: "#10b981",
+                color: "#3b82f6",
               },
-              missed: {
+              consensusMissed: {
                 label: "Missed",
                 color: "#ef4444",
               },
@@ -230,23 +288,23 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
                         <div className="space-y-1">
                           <div className="flex items-center justify-between gap-4">
                             <span className="text-xs text-muted-foreground">Earned:</span>
-                            <span className="text-sm font-display text-success">{data.earned} GNO</span>
+                            <span className="text-sm font-display text-chart-1">{data.consensusEarned} GNO</span>
                           </div>
                           <div className="flex items-center justify-between gap-4">
                             <span className="text-xs text-muted-foreground">Missed:</span>
-                            <span className="text-sm font-display text-destructive">{data.missed} GNO</span>
+                            <span className="text-sm font-display text-destructive">{data.consensusMissed} GNO</span>
                           </div>
                           <div className="flex items-center justify-between gap-4 pt-1 border-t">
                             <span className="text-xs text-muted-foreground">Total:</span>
-                            <span className="text-sm font-display">{data.total} GNO</span>
+                            <span className="text-sm font-display">{data.consensusTotal} GNO</span>
                           </div>
                         </div>
                       </div>
                     )
                   }}
                 />
-                <Bar dataKey="earned" stackId="rewards" fill="#10b981" radius={[0, 0, 4, 4]} />
-                <Bar dataKey="missed" stackId="rewards" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="consensusEarned" stackId="consensus" fill="#3b82f6" radius={[0, 0, 4, 4]} />
+                <Bar dataKey="consensusMissed" stackId="consensus" fill="#ef4444" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>

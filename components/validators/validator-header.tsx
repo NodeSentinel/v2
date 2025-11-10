@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Server, Bell, Sun, Moon } from "lucide-react"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Server, Bell, Sun, Moon, Settings } from "lucide-react"
 import Link from "next/link"
 import AlertConfiguration from "./alert-configuration"
 import validatorMockJson from "@/validator-mock.json"
@@ -13,7 +13,6 @@ const validatorData = validatorMockJson as ValidatorData
 
 export default function ValidatorHeader() {
   const [alertsOpen, setAlertsOpen] = React.useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [theme, setTheme] = React.useState<"light" | "dark">("dark")
 
   React.useEffect(() => {
@@ -59,28 +58,9 @@ export default function ValidatorHeader() {
                 {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
               </Button>
 
-              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Menu className="size-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[280px]">
-                  <nav className="flex flex-col gap-4 mt-8">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => {
-                        setAlertsOpen(true)
-                        setMobileMenuOpen(false)
-                      }}
-                    >
-                      <Bell className="size-4 mr-2" />
-                      Configure Alerts
-                    </Button>
-                  </nav>
-                </SheetContent>
-              </Sheet>
+              <Button variant="ghost" size="icon" onClick={() => setAlertsOpen(true)}>
+                <Settings className="size-5" />
+              </Button>
             </div>
           </div>
         </div>

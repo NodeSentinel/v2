@@ -28,6 +28,11 @@ export interface AlertConfig {
   inactivitySlots: number // number of slots before considering validator inactive
   rewardThreshold: number // GNO amount to trigger reward alert
   alertFrequency: number // minutes between repeated alerts
+  alerts: {
+    syncCommitteeParticipation: boolean
+    withdrawals: boolean
+    blockProposer: boolean
+  }
 }
 
 export interface Stats {
