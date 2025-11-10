@@ -57,24 +57,24 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
       }
     >
       <Tabs defaultValue="missed-attestations" className="w-full">
-        <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="overflow-x-auto">
           <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-6 h-auto">
-            <TabsTrigger value="missed-attestations" className="h-10 flex-shrink-0 px-4 md:px-3">
+            <TabsTrigger value="missed-attestations" className="h-10 flex-shrink-0 px-3 md:px-3">
               Missed Attestations
             </TabsTrigger>
-            <TabsTrigger value="incidents" className="h-10 flex-shrink-0 px-4 md:px-3">
+            <TabsTrigger value="incidents" className="h-10 flex-shrink-0 px-3 md:px-3">
               Incidents
             </TabsTrigger>
-            <TabsTrigger value="rewards" className="h-10 flex-shrink-0 px-4 md:px-3">
+            <TabsTrigger value="rewards" className="h-10 flex-shrink-0 px-3 md:px-3">
               Rewards
             </TabsTrigger>
-            <TabsTrigger value="blocks" className="h-10 flex-shrink-0 px-4 md:px-3">
+            <TabsTrigger value="blocks" className="h-10 flex-shrink-0 px-3 md:px-3">
               Blocks
             </TabsTrigger>
-            <TabsTrigger value="deposits" className="h-10 flex-shrink-0 px-4 md:px-3">
+            <TabsTrigger value="deposits" className="h-10 flex-shrink-0 px-3 md:px-3">
               Deposits
             </TabsTrigger>
-            <TabsTrigger value="withdrawals" className="h-10 flex-shrink-0 px-4 md:px-3">
+            <TabsTrigger value="withdrawals" className="h-10 flex-shrink-0 px-3 md:px-3">
               Withdrawals
             </TabsTrigger>
           </TabsList>
