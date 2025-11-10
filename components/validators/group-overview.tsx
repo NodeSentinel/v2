@@ -23,14 +23,23 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
   )
 
   const getStatusDisplay = () => {
-    const displays: { emoji: string; count: number; label: string }[] = []
+    const displays: { emoji: string; count: number; label: string; color: string }[] = []
 
-    if (statusCounts.active) displays.push({ emoji: "🟢", count: statusCounts.active, label: "active" })
-    if (statusCounts.inactive) displays.push({ emoji: "🟡", count: statusCounts.inactive, label: "inactive" })
+    if (statusCounts.active)
+      displays.push({ emoji: "🟢", count: statusCounts.active, label: "active", color: "text-success" })
+    if (statusCounts.inactive)
+      displays.push({ emoji: "🟡", count: statusCounts.inactive, label: "inactive", color: "text-warning" })
     if (statusCounts.active_exiting)
-      displays.push({ emoji: "🟠", count: statusCounts.active_exiting, label: "active exiting" })
-    if (statusCounts.slashed) displays.push({ emoji: "🚫", count: statusCounts.slashed, label: "slashed" })
-    if (statusCounts.exited) displays.push({ emoji: "🔚", count: statusCounts.exited, label: "exited" })
+      displays.push({
+        emoji: "🟠",
+        count: statusCounts.active_exiting,
+        label: "active exiting",
+        color: "text-orange-500",
+      })
+    if (statusCounts.slashed)
+      displays.push({ emoji: "🚫", count: statusCounts.slashed, label: "slashed", color: "text-destructive" })
+    if (statusCounts.exited)
+      displays.push({ emoji: "🔚", count: statusCounts.exited, label: "exited", color: "text-muted-foreground" })
 
     return displays
   }
@@ -70,6 +79,17 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
       intent={group.performance >= 98 ? "success" : "default"}
     >
       <div className="space-y-6">
+        <div className="flex items-center gap-4 flex-wrap pb-3 border-b border-border/50">
+          <p className="text-xs font-semibold text-muted-foreground">VALIDATORS:</p>
+          {getStatusDisplay().map((status, idx) => (
+            <div key={idx} className="flex items-center gap-1.5">
+              <span className="text-sm">{status.emoji}</span>
+              <span className={`text-sm font-semibold ${status.color}`}>{status.count}</span>
+              <span className="text-xs text-muted-foreground capitalize">{status.label}</span>
+            </div>
+          ))}
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 pb-4 border-b border-border">
           <div>
             <p className="text-xs text-muted-foreground mb-1">BALANCE</p>
@@ -90,20 +110,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
           </div>
         </div>
 
-        <div className="pb-4 border-b border-border">
-          <p className="text-xs text-muted-foreground mb-2">VALIDATORS</p>
-          <div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base">
-            {getStatusDisplay().map((status, idx) => (
-              <span key={idx} className="flex items-center gap-1">
-                <span className="text-base md:text-lg">{status.emoji}</span>
-                <span className="font-medium">{status.count}</span>
-                <span className="text-xs text-muted-foreground">{status.label}</span>
-                {idx < getStatusDisplay().length - 1 && <span className="text-muted-foreground ml-1">|</span>}
-              </span>
-            ))}
-          </div>
-        </div>
-
+        {/* Performance section unchanged */}
         <div className="pb-4 border-b border-border">
           <p className="text-xs text-muted-foreground mb-3">PERFORMANCE</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
@@ -134,6 +141,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
           </div>
         </div>
 
+        {/* Table section unchanged */}
         <div className="relative -mx-4 px-4 md:mx-0 md:px-0">
           <div
             className="overflow-x-auto overscroll-contain"
