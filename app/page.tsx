@@ -38,7 +38,7 @@ export default function DashboardOverview() {
   })
 
   return (
-    <div className="py-4 md:py-8 space-y-6 md:space-y-8">
+    <div className="py-3 md:py-8 space-y-4 md:space-y-8">
       <NotificationBanner notifications={demoNotifications} />
 
       <div className="space-y-2">
@@ -114,15 +114,17 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5 md:space-y-3">
         <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">User Dashboard</h2>
-        <div className="bg-card border border-border rounded-lg p-4 md:p-6">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+        <div className="bg-card border border-border rounded-lg p-3 md:p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-6">
             {/* Left side - Group selector */}
             <div className="flex-1 min-w-0">
-              <label className="text-xs text-muted-foreground uppercase tracking-wide mb-2 block">Select Group</label>
+              <label className="text-xs text-muted-foreground uppercase tracking-wide mb-1.5 md:mb-2 block">
+                Select Group
+              </label>
               <Select value={selectedGroup} onValueChange={(value) => setSelectedGroup(value as GroupFilter)}>
-                <SelectTrigger className="w-full h-11 text-base font-medium border-2 bg-background">
+                <SelectTrigger className="w-full h-10 md:h-11 text-base font-medium border-2 bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -140,7 +142,7 @@ export default function DashboardOverview() {
 
             {/* Right side - Action buttons */}
             <div className="flex items-end gap-3 shrink-0">
-              <Button variant="outline" className="h-11 bg-transparent" onClick={() => setGroupFormOpen(true)}>
+              <Button variant="outline" className="h-10 md:h-11 bg-transparent" onClick={() => setGroupFormOpen(true)}>
                 <Plus className="size-4 mr-2" />
                 Add Group
               </Button>

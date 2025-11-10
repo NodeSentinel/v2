@@ -19,8 +19,8 @@ export default function DashboardCard({
 }: DashboardCardProps) {
   return (
     <Card className={className} {...props}>
-      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-center gap-3 md:gap-0 relative pb-4 md:pb-6 min-h-[60px]">
-        <CardTitle className="flex items-center justify-center gap-2.5 text-center flex-wrap">
+      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-center gap-2 md:gap-0 relative pb-3 md:pb-4 min-h-[52px]">
+        <CardTitle className="card-title flex items-center justify-center gap-2.5 flex-wrap">
           <Bullet variant={intent} />
           <span className="leading-tight">{title}</span>
         </CardTitle>
@@ -29,7 +29,7 @@ export default function DashboardCard({
         )}
       </CardHeader>
 
-      <CardContent className="flex-1 relative">{children}</CardContent>
+      <CardContent className="flex-1 relative p-3 md:p-4">{children}</CardContent>
     </Card>
   )
 }

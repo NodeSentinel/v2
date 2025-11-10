@@ -63,10 +63,10 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
   return (
     <DashboardCard
       title={
-        <div className="flex items-center justify-between w-full gap-3">
-          <div className="flex items-center gap-2 md:gap-3 flex-wrap">
-            <span className="text-base md:text-lg">{group.name}</span>
-            <Badge variant="outline" className="text-sm md:text-base font-display px-2 md:px-3 py-0.5">
+        <div className="flex items-center justify-between w-full gap-2 md:gap-3">
+          <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+            <span className="text-sm md:text-lg">{group.name}</span>
+            <Badge variant="outline" className="text-xs md:text-base font-display px-1.5 md:px-3 py-0.5">
               {totalValidators} validators
             </Badge>
           </div>
@@ -78,8 +78,8 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
       }
       intent={group.performance >= 98 ? "success" : "default"}
     >
-      <div className="space-y-6">
-        <div className="flex items-center gap-4 flex-wrap pb-3 border-b border-border/50">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex items-center gap-3 md:gap-4 flex-wrap pb-2.5 md:pb-3 border-b border-border/50">
           <p className="text-xs font-semibold text-muted-foreground">VALIDATORS:</p>
           {getStatusDisplay().map((status, idx) => (
             <div key={idx} className="flex items-center gap-1.5">
@@ -90,65 +90,63 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
           ))}
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 pb-4 border-b border-border">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4 pb-3.5 md:pb-4 border-b border-border">
           <div>
-            <p className="text-xs text-muted-foreground mb-1">BALANCE</p>
-            <span className="text-lg md:text-xl font-display">{group.totalBalance.toFixed(2)} GNO</span>
+            <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">BALANCE</p>
+            <span className="text-base md:text-xl font-display">{group.totalBalance.toFixed(2)} GNO</span>
             <p className="text-xs text-muted-foreground">${balanceUsd}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground mb-1">EFFECTIVE BALANCE</p>
-            <span className="text-lg md:text-xl font-display">{group.totalEffectiveBalance.toFixed(0)} GNO</span>
+            <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">EFFECTIVE BALANCE</p>
+            <span className="text-base md:text-xl font-display">{group.totalEffectiveBalance.toFixed(0)} GNO</span>
             <p className="text-xs text-muted-foreground">${effectiveBalanceUsd}</p>
           </div>
           <div className="col-span-2 md:col-span-1">
-            <p className="text-xs text-muted-foreground mb-1">CLAIMABLE</p>
-            <span className="text-lg md:text-xl font-display text-success">
+            <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">CLAIMABLE</p>
+            <span className="text-base md:text-xl font-display text-success">
               {group.claimableRewards.toFixed(2)} GNO
             </span>
             <p className="text-xs text-muted-foreground">${claimableUsd}</p>
           </div>
         </div>
 
-        {/* Performance section unchanged */}
-        <div className="pb-4 border-b border-border">
-          <p className="text-xs text-muted-foreground mb-3">PERFORMANCE</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <div className="pb-3.5 md:pb-4 border-b border-border">
+          <p className="text-xs text-muted-foreground mb-2.5 md:mb-3">PERFORMANCE</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
             <div>
-              <p className="text-xs text-muted-foreground mb-1">1H</p>
-              <span className={`text-lg md:text-2xl font-display ${getPerformanceColor(group.performance)}`}>
+              <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">1H</p>
+              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(group.performance)}`}>
                 {group.performance.toFixed(2)}%
               </span>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground mb-1">24H</p>
-              <span className={`text-lg md:text-2xl font-display ${getPerformanceColor(performance24h)}`}>
+              <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">24H</p>
+              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(performance24h)}`}>
                 {performance24h.toFixed(2)}%
               </span>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground mb-1">7D</p>
-              <span className={`text-lg md:text-2xl font-display ${getPerformanceColor(performance7d)}`}>
+              <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">7D</p>
+              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(performance7d)}`}>
                 {performance7d.toFixed(2)}%
               </span>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground mb-1">30D</p>
-              <span className={`text-lg md:text-2xl font-display ${getPerformanceColor(performance30d)}`}>
+              <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">30D</p>
+              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(performance30d)}`}>
                 {performance30d.toFixed(2)}%
               </span>
             </div>
           </div>
         </div>
 
-        {/* Table section unchanged */}
-        <div className="relative -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="relative -mx-3 px-3 md:mx-0 md:px-0">
           <div
             className="overflow-x-auto overscroll-contain"
             style={{ overscrollBehaviorX: "contain", overscrollBehaviorY: "auto" }}
           >
             <div className="min-w-[600px] md:min-w-0">
-              <div className="grid grid-cols-6 gap-4 text-center pb-3 border-b border-border">
+              <div className="grid grid-cols-6 gap-4 text-center pb-2.5 md:pb-3 border-b border-border">
                 <div className="text-xs text-muted-foreground">PERIOD</div>
                 <div className="text-xs text-muted-foreground">APY%</div>
                 <div className="text-xs text-muted-foreground">CONSENSUS</div>
@@ -158,7 +156,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
               </div>
 
               {/* Daily */}
-              <div className="grid grid-cols-6 gap-4 text-center py-3 border-b border-border/50">
+              <div className="grid grid-cols-6 gap-4 text-center py-2.5 md:py-3 border-b border-border/50">
                 <div className="text-sm font-medium">Day</div>
                 <div className="text-sm font-display text-success">{stats.apyDay.toFixed(2)}%</div>
                 <div className="space-y-0.5">
@@ -179,7 +177,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
               </div>
 
               {/* Weekly */}
-              <div className="grid grid-cols-6 gap-4 text-center py-3 border-b border-border/50">
+              <div className="grid grid-cols-6 gap-4 text-center py-2.5 md:py-3 border-b border-border/50">
                 <div className="text-sm font-medium">Week</div>
                 <div className="text-sm font-display text-success">{stats.apyWeek.toFixed(2)}%</div>
                 <div className="space-y-0.5">
@@ -200,7 +198,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
               </div>
 
               {/* Monthly */}
-              <div className="grid grid-cols-6 gap-4 text-center py-3">
+              <div className="grid grid-cols-6 gap-4 text-center py-2.5 md:py-3">
                 <div className="text-sm font-medium">Month</div>
                 <div className="text-sm font-display text-success">{stats.apyMonth.toFixed(2)}%</div>
                 <div className="space-y-0.5">

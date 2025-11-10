@@ -21,12 +21,12 @@ export default function NodeCard({ node, onClick }: NodeCardProps) {
       className="cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all"
       onClick={onClick}
     >
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+      <div className="section-spacing">
+        <div className="grid grid-cols-2 grid-spacing">
           <div>
-            <p className="text-xs text-muted-foreground mb-1">VALIDATORS</p>
+            <p className="label-primary mb-1">VALIDATORS</p>
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-display">{node.validators.length}</span>
+              <span className="value-secondary">{node.validators.length}</span>
               {inactiveValidators > 0 && (
                 <Badge variant="destructive" className="text-xs">
                   {inactiveValidators} inactive
@@ -35,10 +35,10 @@ export default function NodeCard({ node, onClick }: NodeCardProps) {
             </div>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground mb-1">PERFORMANCE</p>
+            <p className="label-primary mb-1">PERFORMANCE</p>
             <span
               className={cn(
-                "text-2xl font-display",
+                "value-secondary",
                 node.performance >= 98 ? "text-success" : node.performance >= 95 ? "text-warning" : "text-destructive",
               )}
             >
@@ -47,25 +47,25 @@ export default function NodeCard({ node, onClick }: NodeCardProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 grid-spacing">
           <div>
-            <p className="text-xs text-muted-foreground mb-1">BALANCE</p>
-            <span className="text-lg font-display">{node.totalBalance.toFixed(2)} GNO</span>
+            <p className="label-primary mb-1">BALANCE</p>
+            <span className="value-small">{node.totalBalance.toFixed(2)} GNO</span>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground mb-1">CLAIMABLE</p>
-            <span className="text-lg font-display text-success">{node.claimableRewards.toFixed(2)} GNO</span>
+            <p className="label-primary mb-1">CLAIMABLE</p>
+            <span className="value-small text-success">{node.claimableRewards.toFixed(2)} GNO</span>
           </div>
         </div>
 
-        <div className="pt-2 border-t border-border space-y-2">
+        <div className="pt-3 border-t border-border space-y-2">
           <div>
-            <p className="text-xs text-muted-foreground">WITHDRAWAL ADDRESS</p>
-            <code className="text-xs font-mono">{node.withdrawalAddress}</code>
+            <p className="label-primary">WITHDRAWAL ADDRESS</p>
+            <code className="text-helper font-mono">{node.withdrawalAddress}</code>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">FEE ADDRESS</p>
-            <code className="text-xs font-mono">{node.feeAddress}</code>
+            <p className="label-primary">FEE ADDRESS</p>
+            <code className="text-helper font-mono">{node.feeAddress}</code>
           </div>
         </div>
       </div>
