@@ -41,68 +41,72 @@ export default function DashboardOverview() {
     <div className="py-4 md:py-8 space-y-6 md:space-y-8">
       <NotificationBanner notifications={demoNotifications} />
 
-      <div className="space-y-3">
-        <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">Chain Statistics</h2>
-        <div className="bg-card border-2 border-primary/30 rounded-lg p-4 md:p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="space-y-2">
+        <h2 className="text-xs md:text-sm font-display text-muted-foreground uppercase tracking-wider">
+          Chain Statistics
+        </h2>
+        <div className="bg-muted/30 border border-border/50 rounded-lg p-3 md:p-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {/* GNO Price Card */}
-            <div className="bg-muted/50 border border-primary/20 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-primary" />
-                  <span className="text-xs text-muted-foreground uppercase tracking-wide">GNO Price</span>
+            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-3.5 h-3.5 text-primary/70" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide block">
+                    GNO Price
+                  </span>
+                  <span className="text-sm md:text-base font-display font-bold text-foreground">
+                    ${validatorData.stats.gnoPrice.toFixed(2)}
+                  </span>
                 </div>
-                <span className="text-lg font-display font-bold text-primary">
-                  ${validatorData.stats.gnoPrice.toFixed(2)}
-                </span>
               </div>
             </div>
 
             {/* Active Validators Card */}
-            <div className="bg-chart-2/10 border border-chart-2/30 rounded-lg p-4 flex items-center gap-3">
-              <div className="p-2 bg-chart-2/20 rounded-lg">
-                <Users className="w-5 h-5 text-chart-2" />
+            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3 flex items-center gap-2">
+              <div className="p-1.5 bg-chart-2/10 rounded">
+                <Users className="w-3.5 h-3.5 text-chart-2" />
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wide">Active Validators</p>
-                <p className="text-xl md:text-2xl font-display font-bold">450,450</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide">Active</p>
+                <p className="text-sm md:text-base font-display font-bold truncate">450,450</p>
               </div>
             </div>
 
             {/* Staked GNO Card */}
-            <div className="bg-muted/50 border border-primary/20 rounded-lg p-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Coins className="w-4 h-4 text-primary" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Total Staked</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-lg font-display font-bold text-primary">
-                      {totalStakedGno.toLocaleString()} GNO
+            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3">
+              <div className="flex items-center gap-2">
+                <Coins className="w-3.5 h-3.5 text-primary/70" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide block">
+                    Staked
+                  </span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm md:text-base font-display font-bold truncate">
+                      {(totalStakedGno / 1000).toFixed(0)}k
                     </span>
-                    <div className="text-xs text-muted-foreground">${totalStakedUsd}</div>
+                    <span className="text-[10px] text-muted-foreground">GNO</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Joining/Leaving Card */}
-            <div className="bg-muted/50 border border-border rounded-lg p-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowUpCircle className="w-4 h-4 text-chart-2" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Joining</span>
+            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <ArrowUpCircle className="w-3 h-3 text-chart-2" />
+                    <span className="text-[10px] md:text-xs text-muted-foreground">Joining</span>
                   </div>
-                  <span className="text-lg font-display font-bold text-chart-2">2,345</span>
+                  <span className="text-sm md:text-base font-display font-bold text-chart-2">2.3k</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowDownCircle className="w-4 h-4 text-warning" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Leaving</span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <ArrowDownCircle className="w-3 h-3 text-warning" />
+                    <span className="text-[10px] md:text-xs text-muted-foreground">Leaving</span>
                   </div>
-                  <span className="text-lg font-display font-bold text-warning">500</span>
+                  <span className="text-sm md:text-base font-display font-bold text-warning">500</span>
                 </div>
               </div>
             </div>

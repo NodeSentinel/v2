@@ -117,12 +117,13 @@ export default function AttestationsChart({ data }: AttestationsChartProps) {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
               <XAxis
                 dataKey="time"
-                stroke="hsl(var(--muted-foreground))"
+                stroke="#888888"
                 fontSize={10}
                 tickLine={false}
                 axisLine={false}
+                tick={{ fill: "#888888" }}
               />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickLine={false} axisLine={false} />
+              <YAxis stroke="#888888" fontSize={10} tickLine={false} axisLine={false} tick={{ fill: "#888888" }} />
               <Tooltip
                 content={({ active, payload }) => {
                   if (!active || !payload || !payload.length) return null

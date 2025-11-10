@@ -17,7 +17,12 @@ export default function NodesPage() {
         <p className="text-sm text-muted-foreground">Manage your validator groups</p>
       </div>
 
-      <GroupList groups={validatorData.groups} selectedFilter={selectedFilter} />
+      <GroupList
+        groups={validatorData.groups}
+        selectedFilter={selectedFilter}
+        stats={validatorData.stats}
+        gnoPrice={validatorData.stats.gnoPrice}
+      />
     </div>
   )
 }

@@ -134,78 +134,83 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <div className="min-w-[600px] md:min-w-0">
-            <div className="grid grid-cols-6 gap-4 text-center pb-3 border-b border-border">
-              <div className="text-xs text-muted-foreground">PERIOD</div>
-              <div className="text-xs text-muted-foreground">APY%</div>
-              <div className="text-xs text-muted-foreground">CONSENSUS</div>
-              <div className="text-xs text-muted-foreground">MISSED</div>
-              <div className="text-xs text-muted-foreground">EXECUTION</div>
-              <div className="text-xs text-muted-foreground">TOTAL USD</div>
-            </div>
+        <div className="relative -mx-4 px-4 md:mx-0 md:px-0">
+          <div
+            className="overflow-x-auto overscroll-contain"
+            style={{ overscrollBehaviorX: "contain", overscrollBehaviorY: "auto" }}
+          >
+            <div className="min-w-[600px] md:min-w-0">
+              <div className="grid grid-cols-6 gap-4 text-center pb-3 border-b border-border">
+                <div className="text-xs text-muted-foreground">PERIOD</div>
+                <div className="text-xs text-muted-foreground">APY%</div>
+                <div className="text-xs text-muted-foreground">CONSENSUS</div>
+                <div className="text-xs text-muted-foreground">MISSED</div>
+                <div className="text-xs text-muted-foreground">EXECUTION</div>
+                <div className="text-xs text-muted-foreground">TOTAL USD</div>
+              </div>
 
-            {/* Daily */}
-            <div className="grid grid-cols-6 gap-4 text-center py-3 border-b border-border/50">
-              <div className="text-sm font-medium">Day</div>
-              <div className="text-sm font-display text-success">{stats.apyDay.toFixed(2)}%</div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold">{stats.gnoDay.toFixed(2)} GNO</div>
-                <div className="text-xs text-muted-foreground">${(stats.gnoDay * gnoPrice).toFixed(2)}</div>
-              </div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold text-destructive">
-                  {stats.missedDay.toFixed(2)} GNO
+              {/* Daily */}
+              <div className="grid grid-cols-6 gap-4 text-center py-3 border-b border-border/50">
+                <div className="text-sm font-medium">Day</div>
+                <div className="text-sm font-display text-success">{stats.apyDay.toFixed(2)}%</div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold">{stats.gnoDay.toFixed(2)} GNO</div>
+                  <div className="text-xs text-muted-foreground">${(stats.gnoDay * gnoPrice).toFixed(2)}</div>
                 </div>
-                <div className="text-xs text-muted-foreground">${(stats.missedDay * gnoPrice).toFixed(2)}</div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold text-destructive">
+                    {stats.missedDay.toFixed(2)} GNO
+                  </div>
+                  <div className="text-xs text-muted-foreground">${(stats.missedDay * gnoPrice).toFixed(2)}</div>
+                </div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold">{stats.xdaiDay.toFixed(2)} xDAI</div>
+                  <div className="text-xs text-muted-foreground">${stats.xdaiDay.toFixed(2)}</div>
+                </div>
+                <div className="text-sm font-mono">${stats.totalDay.toFixed(2)}</div>
               </div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold">{stats.xdaiDay.toFixed(2)} xDAI</div>
-                <div className="text-xs text-muted-foreground">${stats.xdaiDay.toFixed(2)}</div>
-              </div>
-              <div className="text-sm font-mono">${stats.totalDay.toFixed(2)}</div>
-            </div>
 
-            {/* Weekly */}
-            <div className="grid grid-cols-6 gap-4 text-center py-3 border-b border-border/50">
-              <div className="text-sm font-medium">Week</div>
-              <div className="text-sm font-display text-success">{stats.apyWeek.toFixed(2)}%</div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold">{stats.gnoWeek.toFixed(2)} GNO</div>
-                <div className="text-xs text-muted-foreground">${(stats.gnoWeek * gnoPrice).toFixed(2)}</div>
-              </div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold text-destructive">
-                  {stats.missedWeek.toFixed(2)} GNO
+              {/* Weekly */}
+              <div className="grid grid-cols-6 gap-4 text-center py-3 border-b border-border/50">
+                <div className="text-sm font-medium">Week</div>
+                <div className="text-sm font-display text-success">{stats.apyWeek.toFixed(2)}%</div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold">{stats.gnoWeek.toFixed(2)} GNO</div>
+                  <div className="text-xs text-muted-foreground">${(stats.gnoWeek * gnoPrice).toFixed(2)}</div>
                 </div>
-                <div className="text-xs text-muted-foreground">${(stats.missedWeek * gnoPrice).toFixed(2)}</div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold text-destructive">
+                    {stats.missedWeek.toFixed(2)} GNO
+                  </div>
+                  <div className="text-xs text-muted-foreground">${(stats.missedWeek * gnoPrice).toFixed(2)}</div>
+                </div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold">{stats.xdaiWeek.toFixed(2)} xDAI</div>
+                  <div className="text-xs text-muted-foreground">${stats.xdaiWeek.toFixed(2)}</div>
+                </div>
+                <div className="text-sm font-mono">${stats.totalWeek.toFixed(2)}</div>
               </div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold">{stats.xdaiWeek.toFixed(2)} xDAI</div>
-                <div className="text-xs text-muted-foreground">${stats.xdaiWeek.toFixed(2)}</div>
-              </div>
-              <div className="text-sm font-mono">${stats.totalWeek.toFixed(2)}</div>
-            </div>
 
-            {/* Monthly */}
-            <div className="grid grid-cols-6 gap-4 text-center py-3">
-              <div className="text-sm font-medium">Month</div>
-              <div className="text-sm font-display text-success">{stats.apyMonth.toFixed(2)}%</div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold">{stats.gnoMonth.toFixed(2)} GNO</div>
-                <div className="text-xs text-muted-foreground">${(stats.gnoMonth * gnoPrice).toFixed(2)}</div>
-              </div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold text-destructive">
-                  {stats.missedMonth.toFixed(2)} GNO
+              {/* Monthly */}
+              <div className="grid grid-cols-6 gap-4 text-center py-3">
+                <div className="text-sm font-medium">Month</div>
+                <div className="text-sm font-display text-success">{stats.apyMonth.toFixed(2)}%</div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold">{stats.gnoMonth.toFixed(2)} GNO</div>
+                  <div className="text-xs text-muted-foreground">${(stats.gnoMonth * gnoPrice).toFixed(2)}</div>
                 </div>
-                <div className="text-xs text-muted-foreground">${(stats.missedMonth * gnoPrice).toFixed(2)}</div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold text-destructive">
+                    {stats.missedMonth.toFixed(2)} GNO
+                  </div>
+                  <div className="text-xs text-muted-foreground">${(stats.missedMonth * gnoPrice).toFixed(2)}</div>
+                </div>
+                <div className="space-y-0.5">
+                  <div className="text-base font-mono font-semibold">{stats.xdaiMonth.toFixed(2)} xDAI</div>
+                  <div className="text-xs text-muted-foreground">${stats.xdaiMonth.toFixed(2)}</div>
+                </div>
+                <div className="text-sm font-mono">${stats.totalMonth.toFixed(2)}</div>
               </div>
-              <div className="space-y-0.5">
-                <div className="text-base font-mono font-semibold">{stats.xdaiMonth.toFixed(2)} xDAI</div>
-                <div className="text-xs text-muted-foreground">${stats.xdaiMonth.toFixed(2)}</div>
-              </div>
-              <div className="text-sm font-mono">${stats.totalMonth.toFixed(2)}</div>
             </div>
           </div>
         </div>
