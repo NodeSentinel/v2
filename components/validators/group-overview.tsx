@@ -4,7 +4,6 @@ import type { Group, Stats } from "@/types/validator"
 import DashboardCard from "@/components/dashboard/card"
 import { Button } from "@/components/ui/button"
 import { Settings } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 
 interface GroupOverviewProps {
   group: Group
@@ -62,25 +61,20 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
 
   return (
     <DashboardCard
-      title={
-        <div className="flex items-center justify-between w-full gap-2 md:gap-3">
-          <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
-            <span className="text-sm md:text-lg">{group.name}</span>
-            <Badge variant="outline" className="text-xs md:text-base font-display px-1.5 md:px-3 py-0.5">
-              {totalValidators} validators
-            </Badge>
-          </div>
-          <Button variant="outline" size="sm" className="bg-transparent shrink-0" onClick={onManage}>
-            <Settings className="size-4 mr-2" />
-            <span className="hidden sm:inline">Manage</span>
-          </Button>
-        </div>
+      title={group.name}
+      action={
+        <Button variant="outline" size="sm" className="bg-transparent shrink-0" onClick={onManage}>
+          <Settings className="size-4 mr-2" />
+          <span className="hidden sm:inline">Manage</span>
+        </Button>
       }
       intent={group.performance >= 98 ? "success" : "default"}
     >
       <div className="space-y-4 md:space-y-6">
         <div className="flex items-center gap-3 md:gap-4 flex-wrap pb-2.5 md:pb-3 border-b border-border/50">
-          <p className="text-xs font-semibold text-muted-foreground">VALIDATORS:</p>
+          <p className="text-xs font-semibold text-muted-foreground">
+            {totalValidators} VALIDATOR{totalValidators !== 1 ? "S" : ""}:
+          </p>
           {getStatusDisplay().map((status, idx) => (
             <div key={idx} className="flex items-center gap-1.5">
               <span className="text-sm">{status.emoji}</span>
