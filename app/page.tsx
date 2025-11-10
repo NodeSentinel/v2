@@ -33,7 +33,25 @@ export default function DashboardOverview() {
   const [groupFormOpen, setGroupFormOpen] = useState(false)
 
   const totalStakedGno = 350000
-  const totalStakedUsd = (totalStakedGno * validatorData.stats.gnoPrice).toLocaleString("en-US", {
+  const gnoPrice = validatorData.stats.gnoPrice
+  const activeValidators = 450450
+  const joiningValidators = 2300
+  const leavingValidators = 500
+
+  const activeStakedGno = activeValidators * 32
+  const joiningStakedGno = joiningValidators * 32
+  const leavingStakedGno = leavingValidators * 32
+
+  const totalStakedUsd = (totalStakedGno * gnoPrice).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  })
+  const activeStakedUsd = (activeStakedGno * gnoPrice).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  })
+  const joiningStakedUsd = (joiningStakedGno * gnoPrice).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  })
+  const leavingStakedUsd = (leavingStakedGno * gnoPrice).toLocaleString("en-US", {
     maximumFractionDigits: 0,
   })
 
@@ -45,68 +63,82 @@ export default function DashboardOverview() {
         <h2 className="text-xs md:text-sm font-display text-muted-foreground uppercase tracking-wider">
           Chain Statistics
         </h2>
-        <div className="bg-muted/30 border border-border/50 rounded-lg p-3 md:p-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="bg-muted/30 border border-border/50 rounded-lg p-4 md:p-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {/* GNO Price Card */}
-            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-3.5 h-3.5 text-primary/70" />
+            <div className="bg-background border border-border/60 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <TrendingUp className="w-4 h-4 text-primary" />
+                </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide block">
-                    GNO Price
-                  </span>
-                  <span className="text-sm md:text-base font-display font-bold text-foreground">
-                    ${validatorData.stats.gnoPrice.toFixed(2)}
-                  </span>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">GNO Price</p>
+                  <p className="text-2xl font-display font-bold text-foreground">${gnoPrice.toFixed(2)}</p>
                 </div>
               </div>
             </div>
 
             {/* Active Validators Card */}
-            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3 flex items-center gap-2">
-              <div className="p-1.5 bg-chart-2/10 rounded">
-                <Users className="w-3.5 h-3.5 text-chart-2" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide">Active</p>
-                <p className="text-sm md:text-base font-display font-bold truncate">450,450</p>
+            <div className="bg-background border border-border/60 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-chart-2/10 rounded-lg">
+                  <Users className="w-4 h-4 text-chart-2" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Active</p>
+                  <p className="text-2xl font-display font-bold text-foreground truncate">
+                    {activeValidators.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-muted-foreground/80 mt-0.5">${activeStakedUsd}</p>
+                </div>
               </div>
             </div>
 
             {/* Staked GNO Card */}
-            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3">
-              <div className="flex items-center gap-2">
-                <Coins className="w-3.5 h-3.5 text-primary/70" />
+            <div className="bg-background border border-border/60 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <Coins className="w-4 h-4 text-primary" />
+                </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide block">
-                    Staked
-                  </span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm md:text-base font-display font-bold truncate">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Staked</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl font-display font-bold text-foreground">
                       {(totalStakedGno / 1000).toFixed(0)}k
                     </span>
-                    <span className="text-[10px] text-muted-foreground">GNO</span>
+                    <span className="text-sm text-muted-foreground font-medium">GNO</span>
                   </div>
+                  <p className="text-xs text-muted-foreground/80 mt-0.5">${totalStakedUsd}</p>
                 </div>
               </div>
             </div>
 
             {/* Joining/Leaving Card */}
-            <div className="bg-background/80 border border-border/40 rounded-md p-2.5 md:p-3">
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <ArrowUpCircle className="w-3 h-3 text-chart-2" />
-                    <span className="text-[10px] md:text-xs text-muted-foreground">Joining</span>
+            <div className="bg-background border border-border/60 rounded-lg p-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-chart-2/10 rounded">
+                      <ArrowUpCircle className="w-3.5 h-3.5 text-chart-2" />
+                    </div>
+                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Joining</span>
                   </div>
-                  <span className="text-sm md:text-base font-display font-bold text-chart-2">2.3k</span>
+                  <div className="text-right">
+                    <p className="text-lg font-display font-bold text-chart-2">2.3k</p>
+                    <p className="text-xs text-muted-foreground/80">${joiningStakedUsd}</p>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <ArrowDownCircle className="w-3 h-3 text-warning" />
-                    <span className="text-[10px] md:text-xs text-muted-foreground">Leaving</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-warning/10 rounded">
+                      <ArrowDownCircle className="w-3.5 h-3.5 text-warning" />
+                    </div>
+                    <span className="text-xs text-muted-foreground uppercase tracking-wide">Leaving</span>
                   </div>
-                  <span className="text-sm md:text-base font-display font-bold text-warning">500</span>
+                  <div className="text-right">
+                    <p className="text-lg font-display font-bold text-warning">500</p>
+                    <p className="text-xs text-muted-foreground/80">${leavingStakedUsd}</p>
+                  </div>
                 </div>
               </div>
             </div>
