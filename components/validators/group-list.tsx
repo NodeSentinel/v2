@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import type { Group, GroupFilter } from "@/types/validator"
-import GroupCard from "./group-card"
+import type { Group, GroupFilter, Stats } from "@/types/validator"
+import GroupOverview from "./group-overview"
 import GroupForm from "./group-form"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import validatorMockJson from "@/validator-mock.json"
@@ -13,6 +13,8 @@ const validatorData = validatorMockJson as ValidatorData
 interface GroupListProps {
   groups: Group[]
   selectedFilter: GroupFilter
+  stats: Stats
+  gnoPrice: number
 }
 
 function getAggregatedGroup(groups: Group[]): Group {
@@ -37,7 +39,7 @@ function getAggregatedGroup(groups: Group[]): Group {
   }
 }
 
-export default function GroupList({ groups, selectedFilter }: GroupListProps) {
+export default function GroupList({ groups, selectedFilter, stats, gnoPrice }: GroupListProps) {
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
@@ -51,10 +53,11 @@ export default function GroupList({ groups, selectedFilter }: GroupListProps) {
 
   return (
     <>
-      <GroupCard
+      <GroupOverview
         group={displayGroup}
+        stats={stats}
+        gnoPrice={gnoPrice}
         onManage={() => handleManage(displayGroup)}
-        gnoPrice={validatorData.stats.gnoPrice}
       />
 
       <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>

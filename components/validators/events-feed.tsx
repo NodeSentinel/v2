@@ -31,7 +31,6 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
     return eventList.filter((e) => filterIndices.some((index) => e.validatorIndex.toString() === index))
   }
 
-  const allEvents = filterEventsByValidator(events)
   const incidents = filterEventsByValidator(events.filter((e) => e.type === "inactive" || e.type === "slashed"))
   const rewards = filterEventsByValidator(
     events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
@@ -41,7 +40,7 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
   const withdrawals = filterEventsByValidator(
     events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
   )
-  const attestations = filterEventsByValidator(events.filter((e) => e.type === "attestation"))
+  const missedAttestations = filterEventsByValidator(events.filter((e) => e.type === "attestation"))
 
   return (
     <DashboardCard
@@ -53,14 +52,15 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
           value={validatorFilter}
           onChange={(e) => setValidatorFilter(e.target.value)}
           className="w-48 md:w-64 h-8 text-xs md:text-sm"
+          disabled
         />
       }
     >
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="missed-attestations" className="w-full">
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-          <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-7 h-auto">
-            <TabsTrigger value="all" className="h-10 flex-shrink-0 px-4 md:px-3">
-              All
+          <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-6 h-auto">
+            <TabsTrigger value="missed-attestations" className="h-10 flex-shrink-0 px-4 md:px-3">
+              Missed Attestations
             </TabsTrigger>
             <TabsTrigger value="incidents" className="h-10 flex-shrink-0 px-4 md:px-3">
               Incidents
@@ -77,64 +77,45 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
             <TabsTrigger value="withdrawals" className="h-10 flex-shrink-0 px-4 md:px-3">
               Withdrawals
             </TabsTrigger>
-            <TabsTrigger value="attestations" className="h-10 flex-shrink-0 px-4 md:px-3">
-              Attestations
-            </TabsTrigger>
           </TabsList>
         </div>
 
-        <TabsContent value="all" className="space-y-2 mt-4 min-h-[400px]">
-          {allEvents.map((event) => (
-            <EventItem key={event.id} event={event} />
-          ))}
+        <TabsContent value="missed-attestations" className="space-y-2 mt-4 min-h-[400px]">
+          {missedAttestations.length > 0 ? (
+            missedAttestations.map((event) => <EventItem key={event.id} event={event} />)
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No missed attestations</p>
+          )}
         </TabsContent>
 
         <TabsContent value="incidents" className="space-y-2 mt-4 min-h-[400px]">
-          {incidents.length > 0 ? (
-            incidents.map((event) => <EventItem key={event.id} event={event} />)
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No incidents</p>
-          )}
+          <div className="flex items-center justify-center py-16">
+            <p className="text-lg text-muted-foreground">Coming soon</p>
+          </div>
         </TabsContent>
 
         <TabsContent value="rewards" className="space-y-2 mt-4 min-h-[400px]">
-          {rewards.length > 0 ? (
-            rewards.map((event) => <EventItem key={event.id} event={event} />)
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No rewards</p>
-          )}
+          <div className="flex items-center justify-center py-16">
+            <p className="text-lg text-muted-foreground">Coming soon</p>
+          </div>
         </TabsContent>
 
         <TabsContent value="blocks" className="space-y-2 mt-4 min-h-[400px]">
-          {blocks.length > 0 ? (
-            blocks.map((event) => <EventItem key={event.id} event={event} />)
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No blocks proposed</p>
-          )}
+          <div className="flex items-center justify-center py-16">
+            <p className="text-lg text-muted-foreground">Coming soon</p>
+          </div>
         </TabsContent>
 
         <TabsContent value="deposits" className="space-y-2 mt-4 min-h-[400px]">
-          {deposits.length > 0 ? (
-            deposits.map((event) => <EventItem key={event.id} event={event} />)
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No deposits</p>
-          )}
+          <div className="flex items-center justify-center py-16">
+            <p className="text-lg text-muted-foreground">Coming soon</p>
+          </div>
         </TabsContent>
 
         <TabsContent value="withdrawals" className="space-y-2 mt-4 min-h-[400px]">
-          {withdrawals.length > 0 ? (
-            withdrawals.map((event) => <EventItem key={event.id} event={event} />)
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No withdrawals</p>
-          )}
-        </TabsContent>
-
-        <TabsContent value="attestations" className="space-y-2 mt-4 min-h-[400px]">
-          {attestations.length > 0 ? (
-            attestations.map((event) => <EventItem key={event.id} event={event} />)
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No attestations</p>
-          )}
+          <div className="flex items-center justify-center py-16">
+            <p className="text-lg text-muted-foreground">Coming soon</p>
+          </div>
         </TabsContent>
       </Tabs>
     </DashboardCard>

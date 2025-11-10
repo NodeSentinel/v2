@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import StatsOverview from "@/components/validators/stats-overview"
 import AttestationsChart from "@/components/validators/attestations-chart"
 import EventsFeed from "@/components/validators/events-feed"
 import GroupList from "@/components/validators/group-list"
@@ -9,7 +8,10 @@ import NotificationBanner, { type Notification } from "@/components/validators/n
 import validatorMockJson from "@/validator-mock.json"
 import type { ValidatorData, GroupFilter } from "@/types/validator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { TrendingUp, Users, Coins, ArrowUpCircle, ArrowDownCircle } from "lucide-react"
+import { TrendingUp, Users, Coins, ArrowUpCircle, ArrowDownCircle, Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
+import GroupForm from "@/components/validators/group-form"
 
 const validatorData = validatorMockJson as ValidatorData
 
@@ -28,6 +30,7 @@ const demoNotifications: Notification[] = [
 
 export default function DashboardOverview() {
   const [selectedGroup, setSelectedGroup] = useState<GroupFilter>("all")
+  const [groupFormOpen, setGroupFormOpen] = useState(false)
 
   const totalStakedGno = 350000
   const totalStakedUsd = (totalStakedGno * validatorData.stats.gnoPrice).toLocaleString("en-US", {
@@ -109,35 +112,57 @@ export default function DashboardOverview() {
 
       <div className="space-y-3">
         <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">User Dashboard</h2>
-        <Select value={selectedGroup} onValueChange={(value) => setSelectedGroup(value as GroupFilter)}>
-          <SelectTrigger className="w-full sm:w-64 h-12 md:h-14 text-base md:text-lg font-medium border-2 bg-background">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all" className="text-base md:text-lg">
-              All Groups
-            </SelectItem>
-            {validatorData.groups.map((group) => (
-              <SelectItem key={group.id} value={group.id} className="text-base md:text-lg">
-                {group.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="bg-card border border-border rounded-lg p-4 md:p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+            {/* Left side - Group selector */}
+            <div className="flex-1 min-w-0">
+              <label className="text-xs text-muted-foreground uppercase tracking-wide mb-2 block">Select Group</label>
+              <Select value={selectedGroup} onValueChange={(value) => setSelectedGroup(value as GroupFilter)}>
+                <SelectTrigger className="w-full h-11 text-base font-medium border-2 bg-background">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all" className="text-base">
+                    All Groups
+                  </SelectItem>
+                  {validatorData.groups.map((group) => (
+                    <SelectItem key={group.id} value={group.id} className="text-base">
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Right side - Action buttons */}
+            <div className="flex items-end gap-3 shrink-0">
+              <Button variant="outline" className="h-11 bg-transparent" onClick={() => setGroupFormOpen(true)}>
+                <Plus className="size-4 mr-2" />
+                Add Group
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <GroupList groups={validatorData.groups} selectedFilter={selectedGroup} />
-
-      <StatsOverview
-        stats={validatorData.stats}
+      <GroupList
         groups={validatorData.groups}
         selectedFilter={selectedGroup}
+        stats={validatorData.stats}
         gnoPrice={validatorData.stats.gnoPrice}
       />
 
       <AttestationsChart data={validatorData.missedAttestations} />
 
       <EventsFeed events={validatorData.events} validators={validatorData.groups.flatMap((g) => g.validators)} />
+
+      <Sheet open={groupFormOpen} onOpenChange={setGroupFormOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
+          <div className="mt-6">
+            <GroupForm group={null} onClose={() => setGroupFormOpen(false)} />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

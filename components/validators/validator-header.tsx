@@ -3,9 +3,8 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Server, Bell, Plus, Sun, Moon } from "lucide-react"
+import { Menu, Server, Bell, Sun, Moon } from "lucide-react"
 import Link from "next/link"
-import GroupForm from "./group-form"
 import AlertConfiguration from "./alert-configuration"
 import validatorMockJson from "@/validator-mock.json"
 import type { ValidatorData } from "@/types/validator"
@@ -13,7 +12,6 @@ import type { ValidatorData } from "@/types/validator"
 const validatorData = validatorMockJson as ValidatorData
 
 export default function ValidatorHeader() {
-  const [groupFormOpen, setGroupFormOpen] = React.useState(false)
   const [alertsOpen, setAlertsOpen] = React.useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [theme, setTheme] = React.useState<"light" | "dark">("dark")
@@ -46,11 +44,6 @@ export default function ValidatorHeader() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setGroupFormOpen(true)}>
-                <Plus className="size-4 mr-2" />
-                Add Group
-              </Button>
-
               <Button variant="ghost" size="sm" onClick={() => setAlertsOpen(true)}>
                 <Bell className="size-4 mr-2" />
                 Configure Alerts
@@ -78,18 +71,6 @@ export default function ValidatorHeader() {
                       variant="ghost"
                       className="w-full justify-start"
                       onClick={() => {
-                        setGroupFormOpen(true)
-                        setMobileMenuOpen(false)
-                      }}
-                    >
-                      <Plus className="size-4 mr-2" />
-                      Add Group
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => {
                         setAlertsOpen(true)
                         setMobileMenuOpen(false)
                       }}
@@ -104,14 +85,6 @@ export default function ValidatorHeader() {
           </div>
         </div>
       </header>
-
-      <Sheet open={groupFormOpen} onOpenChange={setGroupFormOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
-          <div className="mt-6">
-            <GroupForm group={null} onClose={() => setGroupFormOpen(false)} />
-          </div>
-        </SheetContent>
-      </Sheet>
 
       <Sheet open={alertsOpen} onOpenChange={setAlertsOpen}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">

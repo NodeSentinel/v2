@@ -14,7 +14,7 @@ interface AttestationsChartProps {
 type TimeRange = "1h" | "24h" | "7d"
 
 export default function AttestationsChart({ data }: AttestationsChartProps) {
-  const [timeRange, setTimeRange] = useState<TimeRange>("24h")
+  const [timeRange, setTimeRange] = useState<TimeRange>("1h")
 
   const chartData = useMemo(() => {
     const now = new Date()
@@ -81,8 +81,12 @@ export default function AttestationsChart({ data }: AttestationsChartProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="1h">1h</SelectItem>
-            <SelectItem value="24h">24h</SelectItem>
-            <SelectItem value="7d">7d</SelectItem>
+            <SelectItem value="24h" disabled>
+              24h (Coming soon)
+            </SelectItem>
+            <SelectItem value="7d" disabled>
+              7d (Coming soon)
+            </SelectItem>
           </SelectContent>
         </Select>
       }
