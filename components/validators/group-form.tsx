@@ -1,7 +1,8 @@
 "use client"
 
+import { TooltipContent, TooltipTrigger, Tooltip, TooltipProvider } from "@/components/ui/tooltip"
 import type React from "react"
-
+import DashboardCard from "@/components/dashboard/card"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,7 +21,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import {
   Dialog,
   DialogContent,
@@ -318,32 +318,37 @@ export default function GroupForm({ group, onClose }: GroupFormProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="name">Group Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="e.g., Group Alpha"
-            required
-          />
-        </div>
+        <DashboardCard title="BASIC INFORMATION" intent="default">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Group Name</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g., Group Alpha"
+                required
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="feeRecipient">Execution Rewards Fee Recipient Address</Label>
-          <Input
-            id="feeRecipient"
-            value={feeRecipient}
-            onChange={(e) => setFeeRecipient(e.target.value)}
-            placeholder="0x..."
-            required
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="feeRecipient">Execution Rewards Fee Recipient Address</Label>
+              <Input
+                id="feeRecipient"
+                value={feeRecipient}
+                onChange={(e) => setFeeRecipient(e.target.value)}
+                placeholder="0x..."
+                required
+              />
+            </div>
+          </div>
+        </DashboardCard>
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Label htmlFor="validator-input">Add Validators</Label>
-            {isMobile ? (
+        <DashboardCard
+          title="VALIDATOR MANAGEMENT"
+          intent="default"
+          action={
+            isMobile ? (
               <Dialog open={helpDialogOpen} onOpenChange={setHelpDialogOpen}>
                 <DialogTrigger asChild>
                   <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -374,101 +379,111 @@ export default function GroupForm({ group, onClose }: GroupFormProps) {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            )}
-          </div>
+            )
+          }
+        >
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="validator-input">Add Validators</Label>
+              <div className="relative">
+                <Input
+                  id="validator-input"
+                  value={inputValue}
+                  onChange={(e) => {
+                    setInputValue(e.target.value)
+                    setValidationState("idle")
+                    setErrorMessage("")
+                  }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Enter validator index, public key (0x...), or withdrawal address"
+                  className={`pr-10 ${
+                    validationState === "valid"
+                      ? "border-green-500"
+                      : validationState === "invalid"
+                        ? "border-destructive"
+                        : ""
+                  }`}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  {validationState === "validating" && (
+                    <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                  )}
+                  {validationState === "valid" && <Check className="size-4 text-green-500" />}
+                  {validationState === "invalid" && <X className="size-4 text-destructive" />}
+                </div>
+              </div>
 
-          <div className="relative">
-            <Input
-              id="validator-input"
-              value={inputValue}
-              onChange={(e) => {
-                setInputValue(e.target.value)
-                setValidationState("idle")
-                setErrorMessage("")
-              }}
-              onKeyDown={handleKeyDown}
-              placeholder="Enter validator index, public key (0x...), or withdrawal address"
-              className={`pr-10 ${
-                validationState === "valid"
-                  ? "border-green-500"
-                  : validationState === "invalid"
-                    ? "border-destructive"
-                    : ""
-              }`}
-            />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              {validationState === "validating" && <Loader2 className="size-4 animate-spin text-muted-foreground" />}
-              {validationState === "valid" && <Check className="size-4 text-green-500" />}
-              {validationState === "invalid" && <X className="size-4 text-destructive" />}
-            </div>
-          </div>
+              {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
 
-          {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
-
-          <Button
-            type="button"
-            onClick={handleAddValidator}
-            disabled={!inputValue.trim() || validationState === "validating"}
-            className="w-full bg-transparent"
-            variant="outline"
-          >
-            {validationState === "validating" ? "Validating..." : "Add Validator"}
-          </Button>
-          <p className="text-xs text-muted-foreground">Withdrawal addresses will add all associated validators</p>
-        </div>
-
-        {validators.length > 0 && (
-          <div className="space-y-2 pt-4 border-t">
-            <Label htmlFor="remove-input">Remove by Withdrawal Address</Label>
-            <div className="flex gap-2">
-              <Input
-                id="remove-input"
-                value={removeInputValue}
-                onChange={(e) => setRemoveInputValue(e.target.value)}
-                placeholder="0x... withdrawal address"
-                className="flex-1"
-              />
               <Button
                 type="button"
-                onClick={handleRemoveByWithdrawal}
-                disabled={!removeInputValue.trim() || validationState === "validating"}
+                onClick={handleAddValidator}
+                disabled={!inputValue.trim() || validationState === "validating"}
+                className="w-full bg-transparent"
                 variant="outline"
               >
-                Remove
+                {validationState === "validating" ? "Validating..." : "Add Validator"}
               </Button>
+              <p className="text-xs text-muted-foreground">Withdrawal addresses will add all associated validators</p>
             </div>
-            <p className="text-xs text-muted-foreground">Remove all validators associated with a withdrawal address</p>
-          </div>
-        )}
 
-        {validators.length > 0 && (
-          <div className="space-y-2">
-            <Label className="text-sm">Added Validators ({validators.length})</Label>
-            <div className="border rounded-lg p-3 space-y-2 max-h-60 overflow-y-auto">
-              {validators.map((validator) => (
-                <div
-                  key={validator.id}
-                  className="flex items-center gap-2 p-2 rounded-md bg-muted/50 hover:bg-muted transition-colors"
-                >
-                  <Badge variant="outline" className="shrink-0 text-xs capitalize">
-                    {validator.type}
-                  </Badge>
-                  <span className="text-sm flex-1 truncate">{validator.displayName}</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeValidator(validator.id)}
-                    className="size-7 shrink-0"
-                  >
-                    <X className="size-3" />
-                  </Button>
+            {validators.length > 0 && (
+              <>
+                <div className="pt-4 border-t space-y-2">
+                  <Label htmlFor="remove-input">Remove by Withdrawal Address</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="remove-input"
+                      value={removeInputValue}
+                      onChange={(e) => setRemoveInputValue(e.target.value)}
+                      placeholder="0x... withdrawal address"
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleRemoveByWithdrawal}
+                      disabled={!removeInputValue.trim() || validationState === "validating"}
+                      variant="outline"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Remove all validators associated with a withdrawal address
+                  </p>
                 </div>
-              ))}
-            </div>
+
+                <div className="pt-4 border-t space-y-2">
+                  <Label className="text-sm">Added Validators ({validators.length})</Label>
+                  <div className="border rounded-lg p-3 space-y-2 max-h-60 overflow-y-auto">
+                    {validators.map((validator) => (
+                      <div
+                        key={validator.id}
+                        className="flex items-center gap-2 p-2 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+                      >
+                        <Badge variant="outline" className="shrink-0 text-xs capitalize">
+                          {validator.type}
+                        </Badge>
+                        <span className="text-sm flex-1 truncate">{validator.displayName}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeValidator(validator.id)}
+                          className="size-7 shrink-0"
+                        >
+                          <X className="size-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        )}
-        <div className="pt-4">
+        </DashboardCard>
+
+        <div className="pt-2">
           <Button type="submit" className="w-full" disabled={validators.length === 0}>
             {group ? "Save Changes" : "Add Group"}
           </Button>
