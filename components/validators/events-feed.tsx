@@ -9,13 +9,15 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import ArrowRight from "@/components/icons/arrow-right"
+import { formatTime } from "@/lib/utils" // Import formatTime function
 
 interface EventsFeedProps {
   events: ValidatorEvent[]
   validators: Validator[]
+  gnoPrice: number
 }
 
-export default function EventsFeed({ events, validators }: EventsFeedProps) {
+export default function EventsFeed({ events, validators, gnoPrice }: EventsFeedProps) {
   const [validatorFilter, setValidatorFilter] = useState<string>("")
 
   const filterEventsByValidator = (eventList: ValidatorEvent[]) => {
@@ -31,16 +33,34 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
     return eventList.filter((e) => filterIndices.some((index) => e.validatorIndex.toString() === index))
   }
 
-  const incidents = filterEventsByValidator(events.filter((e) => e.type === "inactive" || e.type === "slashed"))
-  const consolidations = filterEventsByValidator(
-    events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
+  const incidentEvents = events.filter((e) => e.type === "inactive" || e.type === "slashed")
+
+  // Group incidents by timestamp and type for display
+  const groupedIncidents = incidentEvents.reduce(
+    (acc, event) => {
+      const key = `${event.timestamp}-${event.type}`
+      if (!acc[key]) {
+        acc[key] = {
+          timestamp: event.timestamp,
+          type: event.type,
+          validators: [],
+          details: event.details,
+        }
+      }
+      acc[key].validators.push(event.validatorIndex)
+      return acc
+    },
+    {} as Record<string, { timestamp: string; type: string; validators: number[]; details: string }>,
   )
+
+  const incidents = Object.values(groupedIncidents)
+
+  const consolidations = filterEventsByValidator(events.filter((e) => e.type === "consolidation"))
   const blocks = filterEventsByValidator(events.filter((e) => e.type === "block_proposed"))
   const deposits = filterEventsByValidator(events.filter((e) => e.type === "deposit"))
   const withdrawals = filterEventsByValidator(
     events.filter((e) => e.type === "partial_withdrawal" || e.type === "full_withdrawal"),
   )
-  const missedAttestations = filterEventsByValidator(events.filter((e) => e.type === "attestation"))
 
   return (
     <DashboardCard
@@ -56,12 +76,9 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
         />
       }
     >
-      <Tabs defaultValue="missed-attestations" className="w-full">
+      <Tabs defaultValue="incidents" className="w-full">
         <div className="overflow-x-auto -mx-1 px-1 scrollbar-thin">
-          <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-6 h-auto">
-            <TabsTrigger value="missed-attestations" className="h-10 flex-shrink-0 px-3 md:px-3">
-              Missed Attestations
-            </TabsTrigger>
+          <TabsList className="inline-flex w-auto min-w-full md:grid md:w-full md:grid-cols-5 h-auto">
             <TabsTrigger value="incidents" className="h-10 flex-shrink-0 px-3 md:px-3">
               Incidents
             </TabsTrigger>
@@ -80,42 +97,88 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
           </TabsList>
         </div>
 
-        <TabsContent value="missed-attestations" className="space-y-2 mt-4 min-h-[400px]">
-          {missedAttestations.length > 0 ? (
-            missedAttestations.map((event) => <EventItem key={event.id} event={event} />)
+        <TabsContent value="incidents" className="space-y-2 mt-4 min-h-[400px]">
+          {incidents.length > 0 ? (
+            <div className="space-y-2">
+              {incidents.map((incident, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 md:gap-4 p-3 rounded-lg bg-destructive/10 border border-destructive/30"
+                >
+                  <div className="text-xl md:text-2xl font-display flex-shrink-0 text-destructive">
+                    {incident.type === "slashed" ? "✕" : "⚠"}
+                  </div>
+
+                  <div className="flex-1 text-left min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <Badge variant="destructive" className="text-xs">
+                        {incident.type === "slashed" ? "Slashed" : "Inactive"}
+                      </Badge>
+                      <span className="text-xs font-mono text-muted-foreground">
+                        {incident.validators.length} validator{incident.validators.length !== 1 ? "s" : ""} affected
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                      <div>
+                        <span className="text-muted-foreground">Date: </span>
+                        <span className="font-medium">{formatTime(incident.timestamp)}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Duration: </span>
+                        <span className="font-medium">2h 15m</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Cost: </span>
+                        <span className="font-mono font-medium text-destructive">
+                          {(0.05 * incident.validators.length).toFixed(2)} GNO
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">USD: </span>
+                        <span className="font-mono font-medium">
+                          ${(0.05 * incident.validators.length * gnoPrice).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">No missed attestations</p>
+            <p className="text-sm text-muted-foreground text-center py-8">No incidents</p>
           )}
         </TabsContent>
 
-        <TabsContent value="incidents" className="space-y-2 mt-4 min-h-[400px]">
-          <div className="flex items-center justify-center py-16">
-            <p className="text-lg text-muted-foreground">Coming soon</p>
-          </div>
-        </TabsContent>
-
         <TabsContent value="consolidations" className="space-y-2 mt-4 min-h-[400px]">
-          <div className="flex items-center justify-center py-16">
-            <p className="text-lg text-muted-foreground">Coming soon</p>
-          </div>
+          {consolidations.length > 0 ? (
+            consolidations.map((event) => <EventItem key={event.id} event={event} gnoPrice={gnoPrice} />)
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No consolidations</p>
+          )}
         </TabsContent>
 
         <TabsContent value="blocks" className="space-y-2 mt-4 min-h-[400px]">
-          <div className="flex items-center justify-center py-16">
-            <p className="text-lg text-muted-foreground">Coming soon</p>
-          </div>
+          {blocks.length > 0 ? (
+            blocks.map((event) => <EventItem key={event.id} event={event} gnoPrice={gnoPrice} />)
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No blocks proposed</p>
+          )}
         </TabsContent>
 
         <TabsContent value="deposits" className="space-y-2 mt-4 min-h-[400px]">
-          <div className="flex items-center justify-center py-16">
-            <p className="text-lg text-muted-foreground">Coming soon</p>
-          </div>
+          {deposits.length > 0 ? (
+            deposits.map((event) => <EventItem key={event.id} event={event} gnoPrice={gnoPrice} />)
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No deposits</p>
+          )}
         </TabsContent>
 
         <TabsContent value="withdrawals" className="space-y-2 mt-4 min-h-[400px]">
-          <div className="flex items-center justify-center py-16">
-            <p className="text-lg text-muted-foreground">Coming soon</p>
-          </div>
+          {withdrawals.length > 0 ? (
+            withdrawals.map((event) => <EventItem key={event.id} event={event} gnoPrice={gnoPrice} />)
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No withdrawals</p>
+          )}
         </TabsContent>
       </Tabs>
     </DashboardCard>
@@ -124,9 +187,10 @@ export default function EventsFeed({ events, validators }: EventsFeedProps) {
 
 interface EventItemProps {
   event: ValidatorEvent
+  gnoPrice: number
 }
 
-function EventItem({ event }: EventItemProps) {
+function EventItem({ event, gnoPrice }: EventItemProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const getEventIcon = (type: ValidatorEvent["type"]) => {
@@ -147,6 +211,8 @@ function EventItem({ event }: EventItemProps) {
         return "✕"
       case "attestation":
         return "✓"
+      case "consolidation":
+        return "⇄"
     }
   }
 
@@ -163,6 +229,7 @@ function EventItem({ event }: EventItemProps) {
       case "block_proposed":
       case "sync_committee":
       case "attestation":
+      case "consolidation":
         return "default"
     }
   }
@@ -183,6 +250,8 @@ function EventItem({ event }: EventItemProps) {
         return "text-warning"
       case "attestation":
         return "text-positive"
+      case "consolidation":
+        return "text-chart-3"
     }
   }
 
@@ -191,16 +260,6 @@ function EventItem({ event }: EventItemProps) {
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ")
-  }
-
-  const formatTime = (timestamp: string) => {
-    const date = new Date(timestamp)
-    return date.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
   }
 
   return (

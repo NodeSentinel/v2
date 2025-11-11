@@ -77,11 +77,13 @@ export interface ValidatorEvent {
     | "sync_committee"
     | "slashed"
     | "attestation"
+    | "consolidation" // Added consolidation event type
   validatorIndex: number
   timestamp: string
   details: string
   amount?: number
   blockNumber?: number
+  targetValidator?: number // Added to track which validator it was consolidated into
 }
 
 export interface ValidatorData {

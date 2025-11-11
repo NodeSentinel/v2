@@ -47,7 +47,7 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
       filteredData = mockData
     }
 
-    return filteredData.map((item) => {
+    return filteredData.map((item, i) => {
       const date = new Date(item.timestamp)
       let timeLabel = ""
 
@@ -61,10 +61,12 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
 
       const executionReward = Number((Math.random() * 0.5 + 0.3).toFixed(3))
 
-      const totalConsensus = 1.0
-      const consensusMissedPercentage = Math.random() * 0.15
-      const consensusEarned = Number((totalConsensus * (1 - consensusMissedPercentage)).toFixed(3))
-      const consensusMissed = Number((totalConsensus * consensusMissedPercentage).toFixed(3))
+      const source = Number((0.25 + Math.random() * 0.05).toFixed(3))
+      const target = Number((0.25 + Math.random() * 0.05).toFixed(3))
+      const head = Number((0.25 + Math.random() * 0.05).toFixed(3))
+      const syncCommittee = i % 5 === 0 ? Number((0.15 + Math.random() * 0.05).toFixed(3)) : 0 // Only some slots have sync committee
+      const missed = Number((Math.random() * 0.15).toFixed(3))
+      const consensusTotal = 1.0
 
       return {
         time: timeLabel,
@@ -75,9 +77,12 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
         // Execution Rewards data (green)
         execution: executionReward,
         // Consensus Rewards data (blue + red stacked)
-        consensusEarned,
-        consensusMissed,
-        consensusTotal: totalConsensus,
+        source,
+        target,
+        head,
+        syncCommittee,
+        missed,
+        consensusTotal,
       }
     })
   }, [data, timeRange])
@@ -92,9 +97,12 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
       return { totalEarned: totalEarned.toFixed(2) }
     } else {
       // consensus-rewards
-      const totalEarned = chartData.reduce((sum, item) => sum + item.consensusEarned, 0)
-      const totalMissed = chartData.reduce((sum, item) => sum + item.consensusMissed, 0)
-      return { totalEarned: totalEarned.toFixed(2), totalMissed: totalMissed.toFixed(2) }
+      const totalSource = chartData.reduce((sum, item) => sum + item.source, 0).toFixed(2)
+      const totalTarget = chartData.reduce((sum, item) => sum + item.target, 0).toFixed(2)
+      const totalHead = chartData.reduce((sum, item) => sum + item.head, 0).toFixed(2)
+      const totalSyncCommittee = chartData.reduce((sum, item) => sum + item.syncCommittee, 0).toFixed(2)
+      const totalMissed = chartData.reduce((sum, item) => sum + item.missed, 0).toFixed(2)
+      return { totalSource, totalTarget, totalHead, totalSyncCommittee, totalMissed }
     }
   }, [chartData, metricType])
 
@@ -141,7 +149,7 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
               <span className="text-xl md:text-2xl font-display text-destructive">{stats.totalMissed}</span>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground mb-1">MAX VALIDATORS</p>
+              <p className="text-xs text-muted-foreground mb-1">VALIDATORS AFFECTED</p>
               <span className="text-xl md:text-2xl font-display text-warning">{stats.maxValidators}</span>
             </div>
           </div>
@@ -153,14 +161,26 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 md:gap-4 pb-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 pb-4">
             <div>
-              <p className="text-xs text-muted-foreground mb-1">TOTAL EARNED</p>
-              <span className="text-xl md:text-2xl font-display text-chart-1">{stats.totalEarned} GNO</span>
+              <p className="text-[10px] md:text-[11px] text-muted-foreground mb-1">SOURCE</p>
+              <span className="text-base md:text-lg font-display text-[#3b82f6]">{stats.totalSource} GNO</span>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground mb-1">TOTAL MISSED</p>
-              <span className="text-xl md:text-2xl font-display text-destructive">{stats.totalMissed} GNO</span>
+              <p className="text-[10px] md:text-[11px] text-muted-foreground mb-1">TARGET</p>
+              <span className="text-base md:text-lg font-display text-[#10b981]">{stats.totalTarget} GNO</span>
+            </div>
+            <div>
+              <p className="text-[10px] md:text-[11px] text-muted-foreground mb-1">HEAD</p>
+              <span className="text-base md:text-lg font-display text-[#8b5cf6]">{stats.totalHead} GNO</span>
+            </div>
+            <div>
+              <p className="text-[10px] md:text-[11px] text-muted-foreground mb-1">SYNC</p>
+              <span className="text-base md:text-lg font-display text-[#fbbf24]">{stats.totalSyncCommittee} GNO</span>
+            </div>
+            <div>
+              <p className="text-[10px] md:text-[11px] text-muted-foreground mb-1">MISSED</p>
+              <span className="text-base md:text-lg font-display text-destructive">{stats.totalMissed} GNO</span>
             </div>
           </div>
         )}
@@ -256,11 +276,23 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
         ) : (
           <ChartContainer
             config={{
-              consensusEarned: {
-                label: "Earned",
+              source: {
+                label: "Source",
                 color: "#3b82f6",
               },
-              consensusMissed: {
+              target: {
+                label: "Target",
+                color: "#10b981",
+              },
+              head: {
+                label: "Head",
+                color: "#8b5cf6",
+              },
+              syncCommittee: {
+                label: "Sync Committee",
+                color: "#fbbf24",
+              },
+              missed: {
                 label: "Missed",
                 color: "#ef4444",
               },
@@ -285,26 +317,50 @@ export default function PerformanceMetrics({ data }: PerformanceMetricsProps) {
                     const data = payload[0].payload
                     return (
                       <div className="rounded-lg border bg-background p-3 shadow-md">
-                        <div className="space-y-1">
+                        <div className="space-y-1 text-xs">
                           <div className="flex items-center justify-between gap-4">
-                            <span className="text-xs text-muted-foreground">Earned:</span>
-                            <span className="text-sm font-display text-chart-1">{data.consensusEarned} GNO</span>
+                            <span className="text-muted-foreground">Source:</span>
+                            <span className="font-display" style={{ color: "#3b82f6" }}>
+                              {data.source} GNO
+                            </span>
                           </div>
                           <div className="flex items-center justify-between gap-4">
-                            <span className="text-xs text-muted-foreground">Missed:</span>
-                            <span className="text-sm font-display text-destructive">{data.consensusMissed} GNO</span>
+                            <span className="text-muted-foreground">Target:</span>
+                            <span className="font-display" style={{ color: "#10b981" }}>
+                              {data.target} GNO
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between gap-4">
+                            <span className="text-muted-foreground">Head:</span>
+                            <span className="font-display" style={{ color: "#8b5cf6" }}>
+                              {data.head} GNO
+                            </span>
+                          </div>
+                          {data.syncCommittee > 0 && (
+                            <div className="flex items-center justify-between gap-4">
+                              <span className="text-muted-foreground">Sync Committee:</span>
+                              <span className="font-display text-warning">{data.syncCommittee} GNO</span>
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between gap-4">
+                            <span className="text-muted-foreground">Missed:</span>
+                            <span className="font-display text-destructive">{data.missed} GNO</span>
                           </div>
                           <div className="flex items-center justify-between gap-4 pt-1 border-t">
-                            <span className="text-xs text-muted-foreground">Total:</span>
-                            <span className="text-sm font-display">{data.consensusTotal} GNO</span>
+                            <span className="text-muted-foreground">Total:</span>
+                            <span className="font-display">{data.consensusTotal} GNO</span>
                           </div>
                         </div>
                       </div>
                     )
                   }}
                 />
-                <Bar dataKey="consensusEarned" stackId="consensus" fill="#3b82f6" radius={[0, 0, 4, 4]} />
-                <Bar dataKey="consensusMissed" stackId="consensus" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                {/* Updated bar colors to distinct values */}
+                <Bar dataKey="source" stackId="consensus" fill="#3b82f6" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="target" stackId="consensus" fill="#10b981" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="head" stackId="consensus" fill="#8b5cf6" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="syncCommittee" stackId="consensus" fill="#fbbf24" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="missed" stackId="consensus" fill="#ef4444" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>

@@ -40,12 +40,11 @@ export default function DashboardOverview() {
   const [eventsLoading, setEventsLoading] = useState(true)
 
   useEffect(() => {
-    // Random delays between 2-5 seconds for each section
-    const chainStatsDelay = Math.random() * 3000 + 2000
-    const userDashboardDelay = Math.random() * 3000 + 2000
-    const groupDataDelay = Math.random() * 3000 + 2000
-    const metricsDelay = Math.random() * 3000 + 2000
-    const eventsDelay = Math.random() * 3000 + 2000
+    const chainStatsDelay = Math.random() * 2000 + 500
+    const userDashboardDelay = Math.random() * 2000 + 500
+    const groupDataDelay = Math.random() * 2000 + 500
+    const metricsDelay = Math.random() * 2000 + 500
+    const eventsDelay = Math.random() * 2000 + 500
 
     const chainStatsTimer = setTimeout(() => setChainStatsLoading(false), chainStatsDelay)
     const userDashboardTimer = setTimeout(() => setUserDashboardLoading(false), userDashboardDelay)
@@ -91,74 +90,88 @@ export default function DashboardOverview() {
 
       {/* Chain Statistics */}
       <div className="space-y-2">
-        <h2 className="text-xs md:text-sm font-display text-muted-foreground uppercase tracking-wider">
+        <h2 className="text-[10px] md:text-xs font-display text-muted-foreground uppercase tracking-wider">
           Chain Statistics
         </h2>
         {chainStatsLoading ? (
           <ChainStatsSkeleton />
         ) : (
-          <div className="bg-muted/30 border border-border/50 rounded-lg p-4 md:p-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <div className="bg-muted/30 border border-border/50 rounded-lg p-2.5 md:p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-5">
               {/* Active Validators Card */}
-              <div className="bg-background border border-border/60 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-chart-2/10 rounded-lg">
-                    <Users className="w-4 h-4 text-chart-2" />
+              <div className="bg-background border border-border/60 rounded-lg p-2.5 md:p-4">
+                <div className="flex items-start gap-2 md:gap-3">
+                  <div className="p-1.5 md:p-2 bg-chart-2/10 rounded-lg">
+                    <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-chart-2" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Active</p>
-                    <p className="text-2xl font-display font-bold text-foreground truncate">
+                    <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide mb-0.5 md:mb-1">
+                      Active
+                    </p>
+                    <p className="text-xl md:text-2xl font-display font-bold text-foreground truncate">
                       {activeValidators.toLocaleString()}
                     </p>
-                    <p className="text-xs text-muted-foreground/80 mt-0.5">${activeStakedUsd}</p>
+                    <p className="text-[10px] md:text-xs text-muted-foreground/80 mt-0.5">${activeStakedUsd}</p>
                   </div>
                 </div>
               </div>
 
               {/* Staked GNO Card */}
-              <div className="bg-background border border-border/60 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Coins className="w-4 h-4 text-primary" />
+              <div className="bg-background border border-border/60 rounded-lg p-2.5 md:p-4">
+                <div className="flex items-start gap-2 md:gap-3">
+                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                    <Coins className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Staked</p>
+                    <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide mb-0.5 md:mb-1">
+                      Staked
+                    </p>
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-2xl font-display font-bold text-foreground">
+                      <span className="text-xl md:text-2xl font-display font-bold text-foreground">
                         {(totalStakedGno / 1000).toFixed(0)}k
                       </span>
-                      <span className="text-sm text-muted-foreground font-medium">GNO</span>
+                      <span className="text-xs md:text-sm text-muted-foreground font-medium">GNO</span>
                     </div>
-                    <p className="text-xs text-muted-foreground/80 mt-0.5">${totalStakedUsd}</p>
+                    <p className="text-[10px] md:text-xs text-muted-foreground/80 mt-0.5">${totalStakedUsd}</p>
                   </div>
                 </div>
               </div>
 
               {/* Joining/Leaving Card */}
-              <div className="bg-background border border-border/60 rounded-lg p-4 sm:col-span-2 lg:col-span-1">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-chart-2/10 rounded">
-                        <ArrowUpCircle className="w-3.5 h-3.5 text-chart-2" />
+              <div className="bg-background border border-border/60 rounded-lg p-2.5 md:p-4 sm:col-span-2 lg:col-span-1">
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                  <div className="flex flex-col gap-1.5 md:gap-2">
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                      <div className="p-1 md:p-1.5 bg-chart-2/10 rounded">
+                        <ArrowUpCircle className="w-3 h-3 md:w-3.5 md:h-3.5 text-chart-2" />
                       </div>
-                      <span className="text-xs text-muted-foreground uppercase tracking-wide">Joining</span>
+                      <span className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide">
+                        Joining
+                      </span>
                     </div>
                     <div>
-                      <p className="text-xl md:text-2xl font-display font-bold text-chart-2">2.3k</p>
-                      <p className="text-xs text-muted-foreground/80 mt-0.5">${joiningStakedUsd}</p>
+                      <div className="flex items-baseline gap-1">
+                        <p className="text-lg md:text-2xl font-display font-bold text-white">2.3k</p>
+                        <span className="text-xs text-white/80">GNO</span>
+                      </div>
+                      <p className="text-[10px] md:text-xs text-muted-foreground/80 mt-0.5">${joiningStakedUsd}</p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-warning/10 rounded">
-                        <ArrowDownCircle className="w-3.5 h-3.5 text-warning" />
+                  <div className="flex flex-col gap-1.5 md:gap-2">
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                      <div className="p-1 md:p-1.5 bg-warning/10 rounded">
+                        <ArrowDownCircle className="w-3 h-3 md:w-3.5 md:h-3.5 text-warning" />
                       </div>
-                      <span className="text-xs text-muted-foreground uppercase tracking-wide">Leaving</span>
+                      <span className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide">
+                        Leaving
+                      </span>
                     </div>
                     <div>
-                      <p className="text-xl md:text-2xl font-display font-bold text-warning">500</p>
-                      <p className="text-xs text-muted-foreground/80 mt-0.5">${leavingStakedUsd}</p>
+                      <div className="flex items-baseline gap-1">
+                        <p className="text-lg md:text-2xl font-display font-bold text-white">500</p>
+                        <span className="text-xs text-white/80">GNO</span>
+                      </div>
+                      <p className="text-[10px] md:text-xs text-muted-foreground/80 mt-0.5">${leavingStakedUsd}</p>
                     </div>
                   </div>
                 </div>
@@ -170,7 +183,7 @@ export default function DashboardOverview() {
 
       {/* User Dashboard */}
       <div className="space-y-2.5 md:space-y-3">
-        <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">User Dashboard</h2>
+        <h2 className="text-[10px] md:text-xs font-display text-primary uppercase tracking-wider">User Dashboard</h2>
         {userDashboardLoading ? (
           <UserDashboardSkeleton />
         ) : (
@@ -225,7 +238,11 @@ export default function DashboardOverview() {
       {eventsLoading ? (
         <EventsFeedSkeleton />
       ) : (
-        <EventsFeed events={validatorData.events} validators={validatorData.groups.flatMap((g) => g.validators)} />
+        <EventsFeed
+          events={validatorData.events}
+          validators={validatorData.groups.flatMap((g) => g.validators)}
+          gnoPrice={validatorData.stats.gnoPrice}
+        />
       )}
 
       <Sheet open={groupFormOpen} onOpenChange={setGroupFormOpen}>
@@ -241,16 +258,16 @@ export default function DashboardOverview() {
 
 function ChainStatsSkeleton() {
   return (
-    <div className="bg-muted/30 border border-border/50 rounded-lg p-4 md:p-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+    <div className="bg-muted/30 border border-border/50 rounded-lg p-2.5 md:p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-5">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-background border border-border/60 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <Skeleton className="w-10 h-10 rounded-lg" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-3 w-16" />
-                <Skeleton className="h-8 w-24" />
-                <Skeleton className="h-3 w-20" />
+          <div key={i} className="bg-background border border-border/60 rounded-lg p-2.5 md:p-4">
+            <div className="flex items-start gap-2 md:gap-3">
+              <Skeleton className="w-8 h-8 md:w-10 md:h-10 rounded-lg" />
+              <div className="flex-1 space-y-1.5 md:space-y-2">
+                <Skeleton className="h-2.5 md:h-3 w-12 md:w-16" />
+                <Skeleton className="h-6 md:h-8 w-20 md:w-24" />
+                <Skeleton className="h-2.5 md:h-3 w-16 md:w-20" />
               </div>
             </div>
           </div>

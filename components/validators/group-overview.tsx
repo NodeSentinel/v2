@@ -72,9 +72,9 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
     >
       <div className="space-y-4 md:space-y-6">
         <div className="flex items-center gap-3 md:gap-4 flex-wrap pb-2.5 md:pb-3 border-b border-border/50">
-          <p className="text-xs font-semibold text-muted-foreground">
-            {totalValidators} VALIDATOR{totalValidators !== 1 ? "S" : ""}:
-          </p>
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold text-xs md:text-sm">
+            {totalValidators} VALIDATOR{totalValidators !== 1 ? "S" : ""}
+          </span>
           {getStatusDisplay().map((status, idx) => (
             <div key={idx} className="flex items-center gap-1.5">
               <span className="text-sm">{status.emoji}</span>
@@ -97,7 +97,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
           </div>
           <div className="col-span-2 md:col-span-1">
             <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">CLAIMABLE</p>
-            <span className="text-base md:text-xl font-display text-success">
+            <span className="text-base md:text-xl font-display text-white">
               {group.claimableRewards.toFixed(2)} GNO
             </span>
             <p className="text-xs text-muted-foreground">${claimableUsd}</p>
@@ -105,31 +105,23 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
         </div>
 
         <div className="pb-3.5 md:pb-4 border-b border-border">
-          <p className="text-xs text-muted-foreground mb-2.5 md:mb-3">PERFORMANCE</p>
+          <p className="text-[10px] md:text-xs text-muted-foreground mb-2.5 md:mb-3">PERFORMANCE</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
             <div>
               <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">1H</p>
-              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(group.performance)}`}>
-                {group.performance.toFixed(2)}%
-              </span>
+              <span className={`text-xl md:text-2xl font-display text-white`}>{group.performance.toFixed(2)}%</span>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">24H</p>
-              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(performance24h)}`}>
-                {performance24h.toFixed(2)}%
-              </span>
+              <span className={`text-xl md:text-2xl font-display text-white`}>{performance24h.toFixed(2)}%</span>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">7D</p>
-              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(performance7d)}`}>
-                {performance7d.toFixed(2)}%
-              </span>
+              <span className={`text-xl md:text-2xl font-display text-white`}>{performance7d.toFixed(2)}%</span>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-0.5 md:mb-1">30D</p>
-              <span className={`text-xl md:text-2xl font-display ${getPerformanceColor(performance30d)}`}>
-                {performance30d.toFixed(2)}%
-              </span>
+              <span className={`text-xl md:text-2xl font-display text-white`}>{performance30d.toFixed(2)}%</span>
             </div>
           </div>
         </div>
@@ -144,7 +136,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
                 <div className="text-xs text-muted-foreground">PERIOD</div>
                 <div className="text-xs text-muted-foreground">APY%</div>
                 <div className="text-xs text-muted-foreground">CONSENSUS</div>
-                <div className="text-xs text-muted-foreground">MISSED</div>
+                <div className="text-xs text-muted-foreground">MISSED REWARDS</div>
                 <div className="text-xs text-muted-foreground">EXECUTION</div>
                 <div className="text-xs text-muted-foreground">TOTAL USD</div>
               </div>
@@ -152,7 +144,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
               {/* Daily */}
               <div className="grid grid-cols-6 gap-4 text-center py-2.5 md:py-3 border-b border-border/50">
                 <div className="text-sm font-medium">Day</div>
-                <div className="text-sm font-display text-success">{stats.apyDay.toFixed(2)}%</div>
+                <div className="text-sm font-display text-white">{stats.apyDay.toFixed(2)}%</div>
                 <div className="space-y-0.5">
                   <div className="text-base font-mono font-semibold">{stats.gnoDay.toFixed(2)} GNO</div>
                   <div className="text-xs text-muted-foreground">${(stats.gnoDay * gnoPrice).toFixed(2)}</div>
@@ -161,7 +153,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
                   <div className="text-base font-mono font-semibold text-destructive">
                     {stats.missedDay.toFixed(2)} GNO
                   </div>
-                  <div className="text-xs text-muted-foreground">${(stats.missedDay * gnoPrice).toFixed(2)}</div>
+                  <div className="text-xs text-muted-foreground">{Math.floor(Math.random() * 3) + 1} validators</div>
                 </div>
                 <div className="space-y-0.5">
                   <div className="text-base font-mono font-semibold">{stats.xdaiDay.toFixed(2)} xDAI</div>
@@ -173,7 +165,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
               {/* Weekly */}
               <div className="grid grid-cols-6 gap-4 text-center py-2.5 md:py-3 border-b border-border/50">
                 <div className="text-sm font-medium">Week</div>
-                <div className="text-sm font-display text-success">{stats.apyWeek.toFixed(2)}%</div>
+                <div className="text-sm font-display text-white">{stats.apyWeek.toFixed(2)}%</div>
                 <div className="space-y-0.5">
                   <div className="text-base font-mono font-semibold">{stats.gnoWeek.toFixed(2)} GNO</div>
                   <div className="text-xs text-muted-foreground">${(stats.gnoWeek * gnoPrice).toFixed(2)}</div>
@@ -182,7 +174,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
                   <div className="text-base font-mono font-semibold text-destructive">
                     {stats.missedWeek.toFixed(2)} GNO
                   </div>
-                  <div className="text-xs text-muted-foreground">${(stats.missedWeek * gnoPrice).toFixed(2)}</div>
+                  <div className="text-xs text-muted-foreground">{Math.floor(Math.random() * 4) + 2} validators</div>
                 </div>
                 <div className="space-y-0.5">
                   <div className="text-base font-mono font-semibold">{stats.xdaiWeek.toFixed(2)} xDAI</div>
@@ -194,7 +186,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
               {/* Monthly */}
               <div className="grid grid-cols-6 gap-4 text-center py-2.5 md:py-3">
                 <div className="text-sm font-medium">Month</div>
-                <div className="text-sm font-display text-success">{stats.apyMonth.toFixed(2)}%</div>
+                <div className="text-sm font-display text-white">{stats.apyMonth.toFixed(2)}%</div>
                 <div className="space-y-0.5">
                   <div className="text-base font-mono font-semibold">{stats.gnoMonth.toFixed(2)} GNO</div>
                   <div className="text-xs text-muted-foreground">${(stats.gnoMonth * gnoPrice).toFixed(2)}</div>
@@ -203,7 +195,7 @@ export default function GroupOverview({ group, stats, gnoPrice, onManage }: Grou
                   <div className="text-base font-mono font-semibold text-destructive">
                     {stats.missedMonth.toFixed(2)} GNO
                   </div>
-                  <div className="text-xs text-muted-foreground">${(stats.missedMonth * gnoPrice).toFixed(2)}</div>
+                  <div className="text-xs text-muted-foreground">{Math.floor(Math.random() * 5) + 1} validators</div>
                 </div>
                 <div className="space-y-0.5">
                   <div className="text-base font-mono font-semibold">{stats.xdaiMonth.toFixed(2)} xDAI</div>

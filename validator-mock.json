@@ -11,7 +11,7 @@
           "id": "val-1",
           "index": 123456,
           "pubkey": "0x9876...4321",
-          "status": "active",
+          "status": "inactive",
           "balance": 32.45,
           "effectiveBalance": 32,
           "performance": 99.8,
@@ -57,7 +57,7 @@
           "id": "val-4",
           "index": 234568,
           "pubkey": "0x6543...1098",
-          "status": "inactive",
+          "status": "slashed",
           "balance": 32.34,
           "effectiveBalance": 32,
           "performance": 99.7,
@@ -158,10 +158,11 @@
     },
     {
       "id": "evt-4",
-      "type": "sync_committee",
+      "type": "consolidation",
       "validatorIndex": 234567,
       "timestamp": "2024-10-27T16:20:00Z",
-      "details": "Selected for sync committee duty (period 512)"
+      "details": "Validator #234567 consolidated into validator #234570",
+      "targetValidator": 234570
     },
     {
       "id": "evt-5",
@@ -191,6 +192,84 @@
       "validatorIndex": 234567,
       "timestamp": "2024-10-27T20:20:00Z",
       "details": "Attestation submitted for slot 8234570"
+    },
+    {
+      "id": "evt-9",
+      "type": "inactive",
+      "validatorIndex": 123456,
+      "timestamp": "2024-10-27T12:15:00Z",
+      "details": "Validator became inactive due to network connectivity issues"
+    },
+    {
+      "id": "evt-10",
+      "type": "slashed",
+      "validatorIndex": 234568,
+      "timestamp": "2024-10-27T08:45:00Z",
+      "details": "Validator slashed for double signing violation"
+    },
+    {
+      "id": "evt-11",
+      "type": "full_withdrawal",
+      "validatorIndex": 234569,
+      "timestamp": "2024-10-27T17:30:00Z",
+      "details": "Full withdrawal of 32 GNO processed",
+      "amount": 32
+    },
+    {
+      "id": "evt-12",
+      "type": "block_proposed",
+      "validatorIndex": 234567,
+      "timestamp": "2024-10-27T15:20:00Z",
+      "details": "Block #8234320 proposed successfully with 150 transactions",
+      "blockNumber": 8234320
+    },
+    {
+      "id": "evt-13",
+      "type": "deposit",
+      "validatorIndex": 234568,
+      "timestamp": "2024-10-27T10:00:00Z",
+      "details": "Deposit of 32 GNO confirmed on Ethereum mainnet",
+      "amount": 32
+    },
+    {
+      "id": "evt-14",
+      "type": "partial_withdrawal",
+      "validatorIndex": 123456,
+      "timestamp": "2024-10-27T13:45:00Z",
+      "details": "Partial withdrawal of rewards processed",
+      "amount": 0.89
+    },
+    {
+      "id": "evt-15",
+      "type": "block_proposed",
+      "validatorIndex": 123457,
+      "timestamp": "2024-10-27T11:10:00Z",
+      "details": "Block #8234100 proposed with 200 transactions",
+      "blockNumber": 8234100
+    },
+    {
+      "id": "evt-16",
+      "type": "deposit",
+      "validatorIndex": 234569,
+      "timestamp": "2024-10-27T07:30:00Z",
+      "details": "Initial deposit of 32 GNO received",
+      "amount": 32
+    },
+    {
+      "id": "evt-17",
+      "type": "consolidation",
+      "validatorIndex": 123457,
+      "timestamp": "2024-10-27T09:15:00Z",
+      "details": "Validator #123457 consolidated into validator #123460",
+      "targetValidator": 123460
+    },
+    {
+      "id": "evt-18",
+      "type": "consolidation",
+      "validatorIndex": 234569,
+      "timestamp": "2024-10-27T06:30:00Z",
+      "details": "Validator #234569 consolidated into validator #234571",
+      "targetValidator": 234571
     }
   ]
 }
