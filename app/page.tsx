@@ -34,6 +34,7 @@ export default function DashboardOverview() {
   const [groupFormOpen, setGroupFormOpen] = useState(false)
 
   const [chainStatsLoading, setChainStatsLoading] = useState(true)
+  const [userDashboardLoading, setUserDashboardLoading] = useState(true)
   const [groupDataLoading, setGroupDataLoading] = useState(true)
   const [metricsLoading, setMetricsLoading] = useState(true)
   const [eventsLoading, setEventsLoading] = useState(true)
@@ -41,17 +42,20 @@ export default function DashboardOverview() {
   useEffect(() => {
     // Random delays between 2-5 seconds for each section
     const chainStatsDelay = Math.random() * 3000 + 2000
+    const userDashboardDelay = Math.random() * 3000 + 2000
     const groupDataDelay = Math.random() * 3000 + 2000
     const metricsDelay = Math.random() * 3000 + 2000
     const eventsDelay = Math.random() * 3000 + 2000
 
     const chainStatsTimer = setTimeout(() => setChainStatsLoading(false), chainStatsDelay)
+    const userDashboardTimer = setTimeout(() => setUserDashboardLoading(false), userDashboardDelay)
     const groupDataTimer = setTimeout(() => setGroupDataLoading(false), groupDataDelay)
     const metricsTimer = setTimeout(() => setMetricsLoading(false), metricsDelay)
     const eventsTimer = setTimeout(() => setEventsLoading(false), eventsDelay)
 
     return () => {
       clearTimeout(chainStatsTimer)
+      clearTimeout(userDashboardTimer)
       clearTimeout(groupDataTimer)
       clearTimeout(metricsTimer)
       clearTimeout(eventsTimer)
@@ -167,35 +171,39 @@ export default function DashboardOverview() {
       {/* User Dashboard */}
       <div className="space-y-2.5 md:space-y-3">
         <h2 className="text-sm md:text-base font-display text-primary uppercase tracking-wider">User Dashboard</h2>
-        <div className="bg-card border border-border rounded-lg p-3 md:p-6">
-          <div className="flex items-end gap-3">
-            <div className="flex-1 min-w-0">
-              <label className="text-xs text-muted-foreground uppercase tracking-wide mb-1.5 md:mb-2 block">
-                Select Group
-              </label>
-              <Select value={selectedGroup} onValueChange={(value) => setSelectedGroup(value as GroupFilter)}>
-                <SelectTrigger className="w-full h-10 text-base font-medium border-2 bg-background">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all" className="text-base">
-                    All Groups
-                  </SelectItem>
-                  {validatorData.groups.map((group) => (
-                    <SelectItem key={group.id} value={group.id} className="text-base">
-                      {group.name}
+        {userDashboardLoading ? (
+          <UserDashboardSkeleton />
+        ) : (
+          <div className="bg-card border border-border rounded-lg p-3 md:p-6">
+            <div className="flex items-end gap-3">
+              <div className="flex-1 min-w-0">
+                <label className="text-xs text-muted-foreground uppercase tracking-wide mb-1.5 md:mb-2 block">
+                  Select Group
+                </label>
+                <Select value={selectedGroup} onValueChange={(value) => setSelectedGroup(value as GroupFilter)}>
+                  <SelectTrigger className="w-full h-10 text-base font-medium border-2 bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="text-base">
+                      All Groups
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                    {validatorData.groups.map((group) => (
+                      <SelectItem key={group.id} value={group.id} className="text-base">
+                        {group.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <Button variant="outline" className="h-10 bg-transparent shrink-0" onClick={() => setGroupFormOpen(true)}>
-              <Plus className="size-4 mr-2" />
-              Add Group
-            </Button>
+              <Button variant="outline" className="h-10 bg-transparent shrink-0" onClick={() => setGroupFormOpen(true)}>
+                <Plus className="size-4 mr-2" />
+                Add Group
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Group Data with Skeleton */}
@@ -375,6 +383,20 @@ function EventsFeedSkeleton() {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function UserDashboardSkeleton() {
+  return (
+    <div className="bg-card border border-border rounded-lg p-3 md:p-6">
+      <div className="flex items-end gap-3">
+        <div className="flex-1 min-w-0 space-y-2">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <Skeleton className="h-10 w-32 shrink-0" />
       </div>
     </div>
   )
