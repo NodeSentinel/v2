@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
-import { Server, Bell, Sun, Moon, Settings } from "lucide-react"
+import { Server, Bell, Settings, MessageSquare } from "lucide-react"
 import Link from "next/link"
 import AlertConfiguration from "./alert-configuration"
 import validatorMockJson from "@/validator-mock.json"
@@ -13,22 +13,6 @@ const validatorData = validatorMockJson as ValidatorData
 
 export default function ValidatorHeader() {
   const [alertsOpen, setAlertsOpen] = React.useState(false)
-  const [theme, setTheme] = React.useState<"light" | "dark">("dark")
-
-  React.useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null
-    if (savedTheme) {
-      setTheme(savedTheme)
-    }
-  }, [])
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark"
-    setTheme(newTheme)
-    localStorage.setItem("theme", newTheme)
-    document.documentElement.classList.remove("light", "dark")
-    document.documentElement.classList.add(newTheme)
-  }
 
   return (
     <>
@@ -43,19 +27,24 @@ export default function ValidatorHeader() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-2">
+              <Button variant="ghost" size="sm" asChild>
+                <a href="https://forms.gle/vEEjdjCELesrsEvLA" target="_blank" rel="noopener noreferrer">
+                  <MessageSquare className="size-4 mr-2" />
+                  Feedback
+                </a>
+              </Button>
+
               <Button variant="ghost" size="sm" onClick={() => setAlertsOpen(true)}>
                 <Bell className="size-4 mr-2" />
                 Configure Alerts
               </Button>
-
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
-              </Button>
             </nav>
 
             <div className="flex md:hidden items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://forms.gle/vEEjdjCELesrsEvLA" target="_blank" rel="noopener noreferrer">
+                  <MessageSquare className="size-5" />
+                </a>
               </Button>
 
               <Button variant="ghost" size="icon" onClick={() => setAlertsOpen(true)}>
